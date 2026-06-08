@@ -18,11 +18,12 @@ import { useSession } from '@/components/auth/session-provider';
 import { can } from '@/lib/auth/rbac';
 import type { Crop } from '@/lib/farm/schema';
 import { YARD_STATUSES, type YardStatus } from '@/lib/yard/schema';
-import { updateTruckStatus, type TruckRow } from '@/lib/actions/yard';
+import { deleteTruck, updateTruckStatus, type TruckRow } from '@/lib/actions/yard';
 import { TruckCard } from './truck-card';
 import { TruckForm } from './truck-form';
 import { WeighDialog } from './weigh-dialog';
 import { Button } from '@/components/ui/button';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { cn } from '@/lib/utils';
 
 function Column({
@@ -30,13 +31,19 @@ function Column({
   title,
   trucks,
   canWrite,
+  canDelete,
   onWeigh,
+  onEdit,
+  onDelete,
 }: {
   status: YardStatus;
   title: string;
   trucks: TruckRow[];
   canWrite: boolean;
+  canDelete: boolean;
   onWeigh: (truck: TruckRow) => void;
+  onEdit: (truck: TruckRow) => void;
+  onDelete: (truck: TruckRow) => void;
 }) {
   const tc = useTranslations('common');
   const { setNodeRef, isOver } = useDroppable({ id: status });
@@ -55,7 +62,15 @@ function Column({
       </div>
       {trucks.length ? (
         trucks.map((truck) => (
-          <TruckCard key={truck.id} truck={truck} canWrite={canWrite} onWeigh={onWeigh} />
+          <TruckCard
+            key={truck.id}
+            truck={truck}
+            canWrite={canWrite}
+            canDelete={canDelete}
+            onWeigh={onWeigh}
+            onEdit={onEdit}
+            onDelete={onDelete}
+          />
         ))
       ) : (
         <p className="py-4 text-center text-xs text-muted-foreground">{tc('noData')}</p>
@@ -66,10 +81,12 @@ function Column({
 
 export function KanbanBoard({ trucks, crops }: { trucks: TruckRow[]; crops: Crop[] }) {
   const t = useTranslations('yard');
+  const tc = useTranslations('common');
   const router = useRouter();
   const { role } = useSession();
   const canWrite = can(role, 'yard_trucks', 'update');
   const canCreate = can(role, 'yard_trucks', 'create');
+  const canDelete = can(role, 'yard_trucks', 'delete');
 
   const [optimisticTrucks, applyOptimistic] = React.useOptimistic(
     trucks,
@@ -77,7 +94,9 @@ export function KanbanBoard({ trucks, crops }: { trucks: TruckRow[]; crops: Crop
       current.map((tr) => (tr.id === update.id ? { ...tr, status: update.status } : tr)),
   );
   const [formOpen, setFormOpen] = React.useState(false);
+  const [editing, setEditing] = React.useState<TruckRow | null>(null);
   const [weighing, setWeighing] = React.useState<TruckRow | null>(null);
+  const [deleting, setDeleting] = React.useState<TruckRow | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
@@ -100,12 +119,30 @@ export function KanbanBoard({ trucks, crops }: { trucks: TruckRow[]; crops: Crop
     });
   }
 
+  async function confirmDelete() {
+    if (!deleting) return;
+    const res = await deleteTruck(deleting.id);
+    setDeleting(null);
+    if (res?.error) {
+      toast.error(res.error);
+      return;
+    }
+    toast.success(tc('deleted'));
+    router.refresh();
+  }
+
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl font-semibold tracking-tight">{t('title')}</h1>
         {canCreate ? (
-          <Button size="sm" onClick={() => setFormOpen(true)}>
+          <Button
+            size="sm"
+            onClick={() => {
+              setEditing(null);
+              setFormOpen(true);
+            }}
+          >
             <Plus className="size-4" />
             {t('addTruck')}
           </Button>
@@ -121,14 +158,27 @@ export function KanbanBoard({ trucks, crops }: { trucks: TruckRow[]; crops: Crop
               title={t(`status_${status}`)}
               trucks={optimisticTrucks.filter((tr) => tr.status === status)}
               canWrite={canWrite}
+              canDelete={canDelete}
               onWeigh={setWeighing}
+              onEdit={(truck) => {
+                setEditing(truck);
+                setFormOpen(true);
+              }}
+              onDelete={setDeleting}
             />
           ))}
         </div>
       </DndContext>
 
-      <TruckForm open={formOpen} onOpenChange={setFormOpen} crops={crops} />
+      <TruckForm open={formOpen} onOpenChange={setFormOpen} editing={editing} crops={crops} />
       <WeighDialog truck={weighing} onOpenChange={(o) => !o && setWeighing(null)} />
+      <ConfirmDialog
+        open={!!deleting}
+        onOpenChange={(o) => !o && setDeleting(null)}
+        title={t('deleteTruckConfirm')}
+        description={deleting?.plate_number}
+        onConfirm={confirmDelete}
+      />
     </div>
   );
 }

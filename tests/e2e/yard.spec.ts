@@ -60,3 +60,29 @@ test('dragging a truck card moves it to a new column and persists', async ({ pag
   await page.reload();
   await expect(page.getByTestId(`col-${target}`).locator(`[data-plate="${plate}"]`)).toBeVisible();
 });
+
+test('a truck can be created, edited, and deleted', async ({ page }) => {
+  await login(page);
+  await page.goto('/ro/yard');
+
+  // Create
+  await page.getByRole('button', { name: 'Adaugă camion' }).click();
+  await page.getByLabel('Număr înmatriculare').fill('TEST-CRUD-1');
+  await page.getByLabel('Șofer').fill('Test Driver');
+  await page.getByRole('button', { name: 'Salvează' }).click();
+  await expect(page.locator('[data-plate="TEST-CRUD-1"]')).toBeVisible();
+
+  // Edit (rename via the card actions menu)
+  await page.locator('[data-plate="TEST-CRUD-1"]').getByRole('button', { name: 'Acțiuni' }).click();
+  await page.getByRole('menuitem', { name: 'Editează' }).click();
+  await page.getByLabel('Număr înmatriculare').fill('TEST-CRUD-2');
+  await page.getByRole('button', { name: 'Salvează' }).click();
+  await expect(page.locator('[data-plate="TEST-CRUD-2"]')).toBeVisible();
+  await expect(page.locator('[data-plate="TEST-CRUD-1"]')).toHaveCount(0);
+
+  // Delete (confirm in the dialog)
+  await page.locator('[data-plate="TEST-CRUD-2"]').getByRole('button', { name: 'Acțiuni' }).click();
+  await page.getByRole('menuitem', { name: 'Șterge' }).click();
+  await page.getByRole('button', { name: 'Șterge' }).click();
+  await expect(page.locator('[data-plate="TEST-CRUD-2"]')).toHaveCount(0);
+});

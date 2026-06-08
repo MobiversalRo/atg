@@ -15,7 +15,8 @@
     "deleted": "Deleted",
     "invalid": "Invalid data",
     "error": "Something went wrong",
-    "retry": "Retry"
+    "retry": "Retry",
+    "actions": "Actions"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -109,6 +110,8 @@
   "yard": {
     "title": "Yard logistics",
     "addTruck": "Add truck",
+    "editTruck": "Edit truck",
+    "deleteTruckConfirm": "Delete this truck?",
     "status_gate": "Gate",
     "status_scale": "At scale",
     "status_dock": "Unloading",

@@ -66,3 +66,21 @@ export async function updateTruckWeights(
   revalidatePath('/[locale]/yard', 'page');
   return {};
 }
+
+export async function updateTruck(id: string, input: TruckInput): Promise<{ error?: string }> {
+  const parsed = truckSchema.safeParse(input);
+  if (!parsed.success) return { error: 'Invalid input' };
+  const supabase = await createClient();
+  const { error } = await supabase.from('yard_trucks').update(parsed.data).eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/[locale]/yard', 'page');
+  return {};
+}
+
+export async function deleteTruck(id: string): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const { error } = await supabase.from('yard_trucks').delete().eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/[locale]/yard', 'page');
+  return {};
+}

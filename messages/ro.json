@@ -15,7 +15,8 @@
     "deleted": "Șters",
     "invalid": "Date invalide",
     "error": "A apărut o eroare",
-    "retry": "Reîncearcă"
+    "retry": "Reîncearcă",
+    "actions": "Acțiuni"
   },
   "nav": {
     "dashboard": "Panou principal",
@@ -109,6 +110,8 @@
   "yard": {
     "title": "Logistică curte",
     "addTruck": "Adaugă camion",
+    "editTruck": "Editează camion",
+    "deleteTruckConfirm": "Sigur ștergeți acest camion?",
     "status_gate": "Poartă",
     "status_scale": "La cântar",
     "status_dock": "La descărcare",
