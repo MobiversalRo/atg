@@ -9,7 +9,11 @@
     "export": "Export",
     "loading": "Se încarcă...",
     "noData": "Nu există date",
-    "signOut": "Deconectare"
+    "signOut": "Deconectare",
+    "all": "Toate",
+    "saved": "Salvat",
+    "deleted": "Șters",
+    "invalid": "Date invalide"
   },
   "nav": {
     "dashboard": "Panou principal",
@@ -28,5 +32,32 @@
     "signIn": "Autentificare",
     "email": "Email",
     "password": "Parolă"
+  },
+  "properties": {
+    "title": "Proprietăți",
+    "add": "Adaugă proprietate",
+    "edit": "Editează proprietate",
+    "name": "Nume / Cod activ",
+    "type": "Tip activ",
+    "area": "Suprafață",
+    "areaUnit": "Unitate",
+    "energyClass": "Clasă energetică",
+    "thermalInsulation": "Izolare termică",
+    "yearBuilt": "An construcție",
+    "status": "Status",
+    "accountingValue": "Valoare contabilă",
+    "currency": "Monedă",
+    "portfolioTotal": "Valoare totală portofoliu",
+    "deleteConfirm": "Sigur ștergeți această proprietate?",
+    "type_residential": "Clădire rezidențială",
+    "type_industrial_hall": "Hală industrială",
+    "type_agricultural_land": "Teren agricol",
+    "type_silo_storage": "Siloz / Depozit",
+    "status_rented": "Cu chiriași",
+    "status_vacant": "Fără chiriași",
+    "status_conservation": "În conservare",
+    "status_own_use": "Regie proprie",
+    "unit_sqm": "mp",
+    "unit_hectare": "ha"
   }
 }

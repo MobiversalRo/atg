@@ -9,7 +9,11 @@
     "export": "Export",
     "loading": "Loading...",
     "noData": "No data",
-    "signOut": "Sign out"
+    "signOut": "Sign out",
+    "all": "All",
+    "saved": "Saved",
+    "deleted": "Deleted",
+    "invalid": "Invalid data"
   },
   "nav": {
     "dashboard": "Dashboard",
@@ -28,5 +32,32 @@
     "signIn": "Sign in",
     "email": "Email",
     "password": "Password"
+  },
+  "properties": {
+    "title": "Properties",
+    "add": "Add property",
+    "edit": "Edit property",
+    "name": "Name / Asset code",
+    "type": "Asset type",
+    "area": "Area",
+    "areaUnit": "Unit",
+    "energyClass": "Energy class",
+    "thermalInsulation": "Thermal insulation",
+    "yearBuilt": "Year built",
+    "status": "Status",
+    "accountingValue": "Accounting value",
+    "currency": "Currency",
+    "portfolioTotal": "Total portfolio value",
+    "deleteConfirm": "Delete this property?",
+    "type_residential": "Residential building",
+    "type_industrial_hall": "Industrial hall",
+    "type_agricultural_land": "Agricultural land",
+    "type_silo_storage": "Silo / Storage",
+    "status_rented": "Rented",
+    "status_vacant": "Vacant",
+    "status_conservation": "In conservation",
+    "status_own_use": "Own use",
+    "unit_sqm": "sqm",
+    "unit_hectare": "ha"
   }
 }
