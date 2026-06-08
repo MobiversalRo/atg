@@ -143,6 +143,7 @@ export function PropertyTable({ data }: { data: Property[] }) {
     return base;
   }, [t, tc, nf, canUpdate, canDelete]);
 
+  // eslint-disable-next-line react-hooks/incompatible-library -- TanStack Table manages its own memoization
   const table = useReactTable({
     data: filtered,
     columns,
