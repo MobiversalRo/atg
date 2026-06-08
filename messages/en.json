@@ -1,0 +1,29 @@
+{
+  "common": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "add": "Add",
+    "search": "Search",
+    "export": "Export",
+    "loading": "Loading...",
+    "noData": "No data",
+    "signOut": "Sign out"
+  },
+  "nav": {
+    "dashboard": "Dashboard",
+    "properties": "Properties",
+    "farm": "Farm",
+    "yard": "Yard logistics"
+  },
+  "home": {
+    "title": "ATG Hybrid ERP",
+    "subtitle": "Real estate & agribusiness management"
+  },
+  "auth": {
+    "signIn": "Sign in",
+    "email": "Email",
+    "password": "Password"
+  }
+}

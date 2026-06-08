@@ -1,0 +1,29 @@
+{
+  "common": {
+    "save": "Salvează",
+    "cancel": "Anulează",
+    "edit": "Editează",
+    "delete": "Șterge",
+    "add": "Adaugă",
+    "search": "Caută",
+    "export": "Export",
+    "loading": "Se încarcă...",
+    "noData": "Nu există date",
+    "signOut": "Deconectare"
+  },
+  "nav": {
+    "dashboard": "Panou principal",
+    "properties": "Proprietăți",
+    "farm": "Fermă",
+    "yard": "Logistică curte"
+  },
+  "home": {
+    "title": "ERP Hibrid ATG",
+    "subtitle": "Management imobiliar și agribusiness"
+  },
+  "auth": {
+    "signIn": "Autentificare",
+    "email": "Email",
+    "password": "Parolă"
+  }
+}
