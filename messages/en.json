@@ -13,7 +13,9 @@
     "all": "All",
     "saved": "Saved",
     "deleted": "Deleted",
-    "invalid": "Invalid data"
+    "invalid": "Invalid data",
+    "error": "Something went wrong",
+    "retry": "Retry"
   },
   "nav": {
     "dashboard": "Dashboard",

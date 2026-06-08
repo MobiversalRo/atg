@@ -13,7 +13,9 @@
     "all": "Toate",
     "saved": "Salvat",
     "deleted": "Șters",
-    "invalid": "Date invalide"
+    "invalid": "Date invalide",
+    "error": "A apărut o eroare",
+    "retry": "Reîncearcă"
   },
   "nav": {
     "dashboard": "Panou principal",

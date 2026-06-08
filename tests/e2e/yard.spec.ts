@@ -28,7 +28,7 @@ test('dragging a truck card moves it to a new column and persists', async ({ pag
   await expect(page.locator(`[data-plate="${plate}"]`)).toBeVisible();
 
   // Find the truck's current column, then pick a different target (robust to prior runs).
-  let current = STATUSES[0];
+  let current: (typeof STATUSES)[number] = STATUSES[0];
   for (const s of STATUSES) {
     if (await page.getByTestId(`col-${s}`).locator(`[data-plate="${plate}"]`).count()) {
       current = s;
