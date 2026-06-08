@@ -1,7 +1,6 @@
-import { User } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import { LocaleSwitcher } from './locale-switcher';
 import { MobileNav } from './mobile-nav';
+import { UserMenu } from './user-menu';
 
 export function Topbar() {
   return (
@@ -10,10 +9,7 @@ export function Topbar() {
       <span className="font-semibold md:hidden">ERP Hibrid ATG</span>
       <div className="ml-auto flex items-center gap-2">
         <LocaleSwitcher />
-        {/* TODO(auth): replace with a user menu + sign out once Supabase auth lands (Task 0.5) */}
-        <Button variant="ghost" size="icon" aria-label="Account">
-          <User className="size-5" />
-        </Button>
+        <UserMenu />
       </div>
     </header>
   );
