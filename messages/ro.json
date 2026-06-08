@@ -103,5 +103,24 @@
     "recordMovement": "Înregistrează",
     "tons": "t",
     "empty": "Gol"
+  },
+  "yard": {
+    "title": "Logistică curte",
+    "addTruck": "Adaugă camion",
+    "status_gate": "Poartă",
+    "status_scale": "La cântar",
+    "status_dock": "La descărcare",
+    "status_exited": "Ieșit",
+    "plate": "Număr înmatriculare",
+    "driver": "Șofer",
+    "cargo": "Marfă",
+    "direction": "Direcție",
+    "dir_inbound": "Intrare",
+    "dir_outbound": "Ieșire",
+    "weigh": "Cântărire",
+    "grossWeight": "Greutate brută",
+    "tareWeight": "Greutate tară",
+    "kg": "kg",
+    "drag": "Mută"
   }
 }

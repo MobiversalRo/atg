@@ -103,5 +103,24 @@
     "recordMovement": "Record",
     "tons": "t",
     "empty": "Empty"
+  },
+  "yard": {
+    "title": "Yard logistics",
+    "addTruck": "Add truck",
+    "status_gate": "Gate",
+    "status_scale": "At scale",
+    "status_dock": "Unloading",
+    "status_exited": "Exited",
+    "plate": "Plate number",
+    "driver": "Driver",
+    "cargo": "Cargo",
+    "direction": "Direction",
+    "dir_inbound": "Inbound",
+    "dir_outbound": "Outbound",
+    "weigh": "Weigh",
+    "grossWeight": "Gross weight",
+    "tareWeight": "Tare weight",
+    "kg": "kg",
+    "drag": "Move"
   }
 }
