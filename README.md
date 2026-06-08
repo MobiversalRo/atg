@@ -26,11 +26,16 @@ Next.js 16 (App Router) · TypeScript · Tailwind v4 · shadcn/ui (Base UI) · S
 
 ```bash
 npm install
-supabase start                 # boots local Postgres + Auth + Studio (Docker)
-cp .env.example .env.local     # then fill with values from `supabase status`
-supabase db reset              # apply migrations + seed
-npm run dev                    # http://localhost:3000  (redirects to /ro)
+supabase start
+cp .env.example .env.local
+supabase db reset
+npm run dev
 ```
+
+- `supabase start` boots local Postgres + Auth + Studio (Docker)
+- fill `.env.local` with the values printed by `supabase status`
+- `supabase db reset` applies the migrations and seed
+- the app runs at http://localhost:3000 (redirects to `/ro`)
 
 `.env.local` needs:
 
@@ -63,9 +68,11 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=<publishable key from `supabase status`>
 Migrations live in `supabase/migrations/`, seed in `supabase/seed.sql`.
 
 ```bash
-supabase db reset                                                  # re-apply migrations + seed
-supabase gen types typescript --local > src/lib/supabase/types.ts  # regenerate types after schema changes
+supabase db reset
+supabase gen types typescript --local > src/lib/supabase/types.ts
 ```
+
+`supabase db reset` re-applies the migrations and seed; regenerate `types.ts` after any schema change.
 
 Row-Level Security enforces the role model in Postgres; `src/lib/auth/rbac.ts`
 mirrors it so the UI can hide controls.
@@ -75,9 +82,9 @@ mirrors it so the UI can hide controls.
 1. **Create a Supabase project** at supabase.com, then link and push:
    ```bash
    supabase link --project-ref <your-project-ref>
-   supabase db push          # applies migrations to the cloud DB
-   # optionally seed the cloud DB (run supabase/seed.sql via the SQL editor)
+   supabase db push
    ```
+   `supabase db push` applies the migrations to the cloud DB; optionally seed it by running `supabase/seed.sql` in the SQL editor.
 2. **Vercel** — import the repo and set environment variables:
    - `NEXT_PUBLIC_SUPABASE_URL` → cloud project URL
    - `NEXT_PUBLIC_SUPABASE_ANON_KEY` → cloud publishable/anon key
