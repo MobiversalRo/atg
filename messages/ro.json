@@ -17,6 +17,9 @@
     "farm": "Fermă",
     "yard": "Logistică curte"
   },
+  "pages": {
+    "comingSoon": "În curând"
+  },
   "home": {
     "title": "ERP Hibrid ATG",
     "subtitle": "Management imobiliar și agribusiness"

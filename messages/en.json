@@ -17,6 +17,9 @@
     "farm": "Farm",
     "yard": "Yard logistics"
   },
+  "pages": {
+    "comingSoon": "Coming soon"
+  },
   "home": {
     "title": "ATG Hybrid ERP",
     "subtitle": "Real estate & agribusiness management"
