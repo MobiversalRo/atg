@@ -122,5 +122,17 @@
     "tareWeight": "Tare weight",
     "kg": "kg",
     "drag": "Move"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "totalArea": "Managed area",
+    "patrimony": "Patrimony value",
+    "grainStock": "Grain stock",
+    "alerts": "Urgent alerts",
+    "noAlerts": "No alerts",
+    "viewLeases": "View leases",
+    "haShort": "ha",
+    "sqmShort": "sqm",
+    "tons": "t"
   }
 }

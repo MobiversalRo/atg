@@ -122,5 +122,17 @@
     "tareWeight": "Greutate tară",
     "kg": "kg",
     "drag": "Mută"
+  },
+  "dashboard": {
+    "title": "Panou principal",
+    "totalArea": "Suprafață administrată",
+    "patrimony": "Valoare patrimoniu",
+    "grainStock": "Stoc cereale",
+    "alerts": "Alerte urgente",
+    "noAlerts": "Fără alerte",
+    "viewLeases": "Vezi arende",
+    "haShort": "ha",
+    "sqmShort": "mp",
+    "tons": "t"
   }
 }
