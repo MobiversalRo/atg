@@ -28,3 +28,10 @@ test('admin can do anything', () => {
   expect(can('admin', 'yard_trucks', 'delete')).toBe(true);
   expect(can('admin', 'properties', 'create')).toBe(true);
 });
+
+test('only admins can access user administration', () => {
+  expect(can('admin', 'users', 'read')).toBe(true);
+  expect(can('admin', 'users', 'create')).toBe(true);
+  expect(can('manager', 'users', 'read')).toBe(false);
+  expect(can('operator', 'users', 'read')).toBe(false);
+});

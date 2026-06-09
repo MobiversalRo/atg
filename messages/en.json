@@ -22,7 +22,8 @@
     "dashboard": "Dashboard",
     "properties": "Properties",
     "farm": "Farm",
-    "yard": "Yard logistics"
+    "yard": "Yard logistics",
+    "users": "Users"
   },
   "pages": {
     "comingSoon": "Coming soon"
@@ -139,5 +140,19 @@
     "haShort": "ha",
     "sqmShort": "sqm",
     "tons": "t"
+  },
+  "users": {
+    "title": "Users",
+    "addUser": "Add user",
+    "editUser": "Edit user",
+    "deleteUserConfirm": "Delete this user?",
+    "email": "Email",
+    "password": "Password",
+    "passwordKeep": "Leave blank to keep the current password",
+    "fullName": "Full name",
+    "role": "Role",
+    "role_admin": "Admin",
+    "role_manager": "Manager",
+    "role_operator": "Operator"
   }
 }

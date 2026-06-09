@@ -2,8 +2,9 @@
 
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
+import { useSession } from '@/components/auth/session-provider';
 import { cn } from '@/lib/utils';
-import { navItems } from './nav-items';
+import { visibleNavItems } from './nav-items';
 
 function isActive(pathname: string, href: string) {
   return href === '/' ? pathname === '/' : pathname.startsWith(href);
@@ -12,12 +13,13 @@ function isActive(pathname: string, href: string) {
 export function Sidebar() {
   const t = useTranslations('nav');
   const pathname = usePathname();
+  const { role } = useSession();
 
   return (
     <aside className="hidden w-60 shrink-0 flex-col border-r bg-sidebar md:flex">
       <div className="flex h-14 items-center px-5 font-semibold">ERP Hibrid ATG</div>
       <nav className="flex flex-col gap-1 p-3">
-        {navItems.map(({ href, key, icon: Icon }) => (
+        {visibleNavItems(role).map(({ href, key, icon: Icon }) => (
           <Link
             key={href}
             href={href}

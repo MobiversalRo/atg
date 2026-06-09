@@ -22,7 +22,8 @@
     "dashboard": "Panou principal",
     "properties": "Proprietăți",
     "farm": "Fermă",
-    "yard": "Logistică curte"
+    "yard": "Logistică curte",
+    "users": "Utilizatori"
   },
   "pages": {
     "comingSoon": "În curând"
@@ -139,5 +140,19 @@
     "haShort": "ha",
     "sqmShort": "mp",
     "tons": "t"
+  },
+  "users": {
+    "title": "Utilizatori",
+    "addUser": "Adaugă utilizator",
+    "editUser": "Editează utilizator",
+    "deleteUserConfirm": "Sigur ștergeți acest utilizator?",
+    "email": "Email",
+    "password": "Parolă",
+    "passwordKeep": "Lasă gol pentru a păstra parola actuală",
+    "fullName": "Nume complet",
+    "role": "Rol",
+    "role_admin": "Administrator",
+    "role_manager": "Manager",
+    "role_operator": "Operator"
   }
 }

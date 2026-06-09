@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Menu } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname } from '@/i18n/navigation';
+import { useSession } from '@/components/auth/session-provider';
 import {
   Sheet,
   SheetContent,
@@ -13,11 +14,12 @@ import {
 } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { navItems } from './nav-items';
+import { visibleNavItems } from './nav-items';
 
 export function MobileNav() {
   const t = useTranslations('nav');
   const pathname = usePathname();
+  const { role } = useSession();
   const [open, setOpen] = useState(false);
 
   return (
@@ -34,7 +36,7 @@ export function MobileNav() {
           <SheetTitle className="px-4 pt-2 text-left">ERP Hibrid ATG</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-1 p-3">
-          {navItems.map(({ href, key, icon: Icon }) => {
+          {visibleNavItems(role).map(({ href, key, icon: Icon }) => {
             const active = href === '/' ? pathname === '/' : pathname.startsWith(href);
             return (
               <Link

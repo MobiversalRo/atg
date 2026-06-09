@@ -6,7 +6,8 @@ export type Resource =
   | 'leases'
   | 'storage'
   | 'inventory'
-  | 'yard_trucks';
+  | 'yard_trucks'
+  | 'users';
 
 export type Action = 'create' | 'read' | 'update' | 'delete';
 
@@ -24,6 +25,8 @@ const MANAGER_WRITE: Resource[] = [
  */
 export function can(role: Role, resource: Resource, action: Action): boolean {
   if (role === 'admin') return true;
+  // User administration is admin-only, including read.
+  if (resource === 'users') return false;
   if (action === 'read') return true;
   if (role === 'manager') return MANAGER_WRITE.includes(resource);
   // operator
