@@ -13,7 +13,7 @@ import { Label } from '@/components/ui/label';
 export default function LoginPage() {
   const t = useTranslations('auth');
   const router = useRouter();
-  const [email, setEmail] = useState('admin@atg.local');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -64,9 +64,6 @@ export default function LoginPage() {
             <Button type="submit" disabled={loading}>
               {t('signIn')}
             </Button>
-            <p className="text-center text-xs text-muted-foreground">
-              Dev: admin@atg.local · manager@atg.local · operator@atg.local — password123
-            </p>
           </form>
         </CardContent>
       </Card>
