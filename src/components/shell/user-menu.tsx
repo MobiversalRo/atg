@@ -10,7 +10,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
@@ -34,14 +33,14 @@ export function UserMenu() {
         <User className="size-5" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-48">
-        <DropdownMenuLabel>
+        <div className="px-1.5 py-1">
           <span className="block text-sm font-medium text-foreground">
             {session.fullName ?? session.email}
           </span>
           <span className="block text-xs capitalize text-muted-foreground">
             {session.role}
           </span>
-        </DropdownMenuLabel>
+        </div>
         <DropdownMenuSeparator />
         <DropdownMenuItem variant="destructive" onClick={signOut}>
           <LogOut className="size-4" />
