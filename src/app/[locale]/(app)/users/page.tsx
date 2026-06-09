@@ -25,6 +25,6 @@ export default async function UsersPage({
     .single();
   if (profile?.role !== 'admin') redirect(`/${locale}`);
 
-  const { data } = await listUsers();
-  return <UsersTable data={data} currentUserId={user.id} />;
+  const { data, error } = await listUsers();
+  return <UsersTable data={data} currentUserId={user.id} error={error} />;
 }

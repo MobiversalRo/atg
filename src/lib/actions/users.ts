@@ -13,6 +13,11 @@ import type { Role } from '@/lib/auth/rbac';
 
 export type UserRow = { id: string; email: string; full_name: string | null; role: Role };
 
+const SERVICE_KEY_MISSING =
+  'User administration is unavailable: SUPABASE_SERVICE_ROLE_KEY is not set on the server.';
+
+const serviceKeyConfigured = () => Boolean(process.env.SUPABASE_SERVICE_ROLE_KEY);
+
 /** Returns the current user's id if they are an admin, otherwise null. */
 async function currentAdminId(): Promise<string | null> {
   const supabase = await createClient();
@@ -30,6 +35,7 @@ async function currentAdminId(): Promise<string | null> {
 
 export async function listUsers(): Promise<{ data: UserRow[]; error?: string }> {
   if (!(await currentAdminId())) return { data: [], error: 'Forbidden' };
+  if (!serviceKeyConfigured()) return { data: [], error: SERVICE_KEY_MISSING };
   const admin = createAdminClient();
   const { data, error } = await admin.auth.admin.listUsers();
   if (error) return { data: [], error: error.message };
@@ -48,6 +54,7 @@ export async function listUsers(): Promise<{ data: UserRow[]; error?: string }> 
 
 export async function createUser(input: CreateUserInput): Promise<{ error?: string }> {
   if (!(await currentAdminId())) return { error: 'Forbidden' };
+  if (!serviceKeyConfigured()) return { error: SERVICE_KEY_MISSING };
   const parsed = createUserSchema.safeParse(input);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? 'Invalid input' };
 
@@ -76,6 +83,7 @@ export async function updateUser(
   input: UpdateUserInput,
 ): Promise<{ error?: string }> {
   if (!(await currentAdminId())) return { error: 'Forbidden' };
+  if (!serviceKeyConfigured()) return { error: SERVICE_KEY_MISSING };
   const parsed = updateUserSchema.safeParse(input);
   if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? 'Invalid input' };
 
@@ -100,6 +108,7 @@ export async function updateUser(
 export async function deleteUser(id: string): Promise<{ error?: string }> {
   const adminId = await currentAdminId();
   if (!adminId) return { error: 'Forbidden' };
+  if (!serviceKeyConfigured()) return { error: SERVICE_KEY_MISSING };
   if (id === adminId) return { error: 'You cannot delete your own account.' };
 
   const admin = createAdminClient();

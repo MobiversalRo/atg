@@ -22,9 +22,11 @@ import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 export function UsersTable({
   data,
   currentUserId,
+  error,
 }: {
   data: UserRow[];
   currentUserId: string;
+  error?: string;
 }) {
   const t = useTranslations('users');
   const tc = useTranslations('common');
@@ -61,6 +63,12 @@ export function UsersTable({
           {t('addUser')}
         </Button>
       </div>
+
+      {error ? (
+        <p className="rounded-md border border-destructive/30 bg-destructive/10 px-3 py-2 text-sm text-destructive">
+          {error}
+        </p>
+      ) : null}
 
       <div className="overflow-x-auto rounded-md border">
         <Table>
