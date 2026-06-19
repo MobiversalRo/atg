@@ -46,3 +46,14 @@ create policy document_types_admin on document_types for all to authenticated
 -- Audit log: everyone reads; inserts happen via server actions (authenticated); no update/delete.
 create policy audit_log_select on audit_log for select to authenticated using (true);
 create policy audit_log_insert on audit_log for insert to authenticated with check (true);
+
+-- Private bucket for scanned documents. CF-4: no delete, no update (immutable).
+insert into storage.buckets (id, name, public) values ('documents', 'documents', false)
+  on conflict (id) do nothing;
+
+-- Authenticated users can read and upload; NO update, NO delete policy => both denied by RLS.
+create policy "documents_read" on storage.objects
+  for select to authenticated using (bucket_id = 'documents');
+create policy "documents_insert" on storage.objects
+  for insert to authenticated with check (bucket_id = 'documents');
+-- Intentionally absent: UPDATE and DELETE policies on bucket 'documents'.
