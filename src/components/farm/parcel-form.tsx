@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useRouter } from '@/i18n/navigation';
 import { parcelSchema, type Crop } from '@/lib/farm/schema';
+import { haToSqm, sqmToHa } from '@/lib/domain/area';
 import {
   addParcelHistory,
   createParcel,
@@ -45,7 +46,7 @@ const blank: FormValues = {
 function fromRow(p: ParcelRow): FormValues {
   return {
     topo_code: p.topo_code,
-    area_ha: String(p.area_ha),
+    area_ha: String(sqmToHa(p.area_sqm)),
     current_crop_id: p.current_crop_id ?? '',
     property_id: p.property_id ?? '',
     notes: p.notes ?? '',
@@ -123,7 +124,8 @@ function ParcelFormBody({
   }, [editing]);
 
   async function onSubmit(values: FormValues) {
-    const parsed = parcelSchema.safeParse(values);
+    const payload = { ...values, area_sqm: haToSqm(Number(values.area_ha || 0)) };
+    const parsed = parcelSchema.safeParse(payload);
     if (!parsed.success) {
       toast.error(parsed.error.issues[0]?.message ?? tc('invalid'));
       return;

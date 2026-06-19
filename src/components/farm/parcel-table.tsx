@@ -8,6 +8,7 @@ import { useRouter } from '@/i18n/navigation';
 import { useSession } from '@/components/auth/session-provider';
 import { can } from '@/lib/auth/rbac';
 import type { Crop } from '@/lib/farm/schema';
+import { sqmToHa } from '@/lib/domain/area';
 import { deleteParcel, type ParcelRow } from '@/lib/actions/parcels';
 import { ParcelForm } from './parcel-form';
 import {
@@ -93,7 +94,7 @@ export function ParcelTable({
                 <TableRow key={p.id}>
                   <TableCell className="font-medium">{p.topo_code}</TableCell>
                   <TableCell>
-                    {nf.format(Number(p.area_ha))} {t('haShort')}
+                    {nf.format(sqmToHa(p.area_sqm))} {t('haShort')}
                   </TableCell>
                   <TableCell>{p.crop_name ?? '—'}</TableCell>
                   {canWrite || canDelete ? (
