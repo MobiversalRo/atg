@@ -49,11 +49,13 @@ export function UserForm({
 
   React.useEffect(() => {
     if (!open) return;
+    const role = editing?.role ?? 'operator';
+    const dbRole = USER_ROLES.includes(role as any) ? (role as (typeof USER_ROLES)[number]) : 'operator';
     reset({
       email: editing?.email ?? '',
       password: '',
       full_name: editing?.full_name ?? '',
-      role: editing?.role ?? 'operator',
+      role: dbRole,
     });
   }, [open, editing, reset]);
 

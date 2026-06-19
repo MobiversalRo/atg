@@ -13,7 +13,7 @@ beforeAll(async () => {
   supabase = createClient(url, anon);
   await supabase.auth.signInWithPassword({ email: 'admin@atg.local', password: 'password123' });
   const { data } = await supabase.from('dossiers').select('id').eq('dossier_number', '101').single();
-  dossierId = data!.id as string;
+  dossierId = (data as unknown as { id: string }).id;
 });
 
 afterAll(async () => {
