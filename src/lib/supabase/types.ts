@@ -34,6 +34,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_log: {
+        Row: {
+          action: string
+          actor: string | null
+          at: string
+          diff: Json | null
+          entity: string
+          entity_id: string
+          id: string
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          at?: string
+          diff?: Json | null
+          entity: string
+          entity_id: string
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          at?: string
+          diff?: Json | null
+          entity?: string
+          entity_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_log_actor_fkey"
+            columns: ["actor"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crops: {
         Row: {
           color: string
@@ -49,6 +87,51 @@ export type Database = {
         }
         Update: {
           color?: string
+          id?: string
+          name?: string
+          name_en?: string
+        }
+        Relationships: []
+      }
+      document_types: {
+        Row: {
+          code: string
+          id: string
+          name: string
+          name_en: string
+          sort_order: number
+        }
+        Insert: {
+          code: string
+          id?: string
+          name: string
+          name_en: string
+          sort_order?: number
+        }
+        Update: {
+          code?: string
+          id?: string
+          name?: string
+          name_en?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      land_categories: {
+        Row: {
+          code: string
+          id: string
+          name: string
+          name_en: string
+        }
+        Insert: {
+          code: string
+          id?: string
+          name: string
+          name_en: string
+        }
+        Update: {
+          code?: string
           id?: string
           name?: string
           name_en?: string
@@ -429,6 +512,9 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
+      unaccent: { Args: { "": string }; Returns: string }
     }
     Enums: {
       area_unit: "sqm" | "hectare"
