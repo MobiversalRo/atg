@@ -55,3 +55,10 @@ export async function getDocumentUrl(storagePath: string): Promise<{ url?: strin
   if (error) return { error: error.message };
   return { url: data.signedUrl };
 }
+
+/** Document-type nomenclator options for the upload form / list labels. */
+export async function listDocumentTypes(): Promise<{ id: string; name: string }[]> {
+  const supabase = await createClient();
+  const { data } = await supabase.from('document_types').select('id, name').order('sort_order');
+  return data ?? [];
+}

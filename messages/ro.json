@@ -23,6 +23,7 @@
     "properties": "Proprietăți",
     "farm": "Fermă",
     "yard": "Logistică curte",
+    "dossiers": "Dosare",
     "users": "Utilizatori"
   },
   "pages": {
@@ -128,6 +129,34 @@
     "tareWeight": "Greutate tară",
     "kg": "kg",
     "drag": "Mută"
+  },
+  "dossiers": {
+    "title": "Dosare de dobândire",
+    "number": "Număr dosar",
+    "holder": "Titular",
+    "acquisitionDate": "Data dobândirii",
+    "status": "Status",
+    "parcels": "Parcele",
+    "documents": "Documente",
+    "archive": "Arhivează",
+    "archiveConfirm": "Arhivați acest dosar?",
+    "status_intabulat": "Intabulat",
+    "status_intabulat_cu_posesie": "Intabulat cu posesie",
+    "status_posesie": "Posesie"
+  },
+  "documents": {
+    "upload": "Încarcă document",
+    "type": "Tip document",
+    "variant": "Variantă",
+    "number": "Număr",
+    "date": "Dată",
+    "file": "Fișier",
+    "view": "Vizualizează",
+    "noDocuments": "Niciun document",
+    "variant_original": "Original",
+    "variant_copie": "Copie",
+    "variant_timbrat": "Timbrat",
+    "variant_legalizat": "Legalizat"
   },
   "dashboard": {
     "title": "Panou principal",
