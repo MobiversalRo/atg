@@ -328,6 +328,77 @@ export type Database = {
           },
         ]
       }
+      notification_recipients: {
+        Row: {
+          notification_id: string
+          profile_id: string
+        }
+        Insert: {
+          notification_id: string
+          profile_id: string
+        }
+        Update: {
+          notification_id?: string
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_recipients_notification_id_fkey"
+            columns: ["notification_id"]
+            isOneToOne: false
+            referencedRelation: "notifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_recipients_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          due_date: string | null
+          id: string
+          lead_days: number
+          lease_id: string | null
+          read_at: string | null
+          status: Database["public"]["Enums"]["lease_payment_status"]
+          type: Database["public"]["Enums"]["notification_type"]
+        }
+        Insert: {
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          lead_days?: number
+          lease_id?: string | null
+          read_at?: string | null
+          status?: Database["public"]["Enums"]["lease_payment_status"]
+          type: Database["public"]["Enums"]["notification_type"]
+        }
+        Update: {
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          lead_days?: number
+          lease_id?: string | null
+          read_at?: string | null
+          status?: Database["public"]["Enums"]["lease_payment_status"]
+          type?: Database["public"]["Enums"]["notification_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       parcel_cf_aliases: {
         Row: {
           cf_number: string
@@ -752,6 +823,7 @@ export type Database = {
       intabulare_status: "intabulat" | "intabulat_cu_posesie" | "posesie"
       lease_payment_method: "cash" | "in_kind"
       lease_payment_status: "paid" | "unpaid"
+      notification_type: "lease_due" | "lease_overdue"
       property_status: "rented" | "vacant" | "conservation" | "own_use"
       property_type:
         | "residential"
@@ -898,6 +970,7 @@ export const Constants = {
       intabulare_status: ["intabulat", "intabulat_cu_posesie", "posesie"],
       lease_payment_method: ["cash", "in_kind"],
       lease_payment_status: ["paid", "unpaid"],
+      notification_type: ["lease_due", "lease_overdue"],
       property_status: ["rented", "vacant", "conservation", "own_use"],
       property_type: [
         "residential",
