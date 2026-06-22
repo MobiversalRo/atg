@@ -732,6 +732,15 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      search_all: {
+        Args: { q: string }
+        Returns: {
+          id: string
+          kind: string
+          label: string
+          sub: string
+        }[]
+      }
       show_limit: { Args: never; Returns: number }
       show_trgm: { Args: { "": string }; Returns: string[] }
       unaccent: { Args: { "": string }; Returns: string }
