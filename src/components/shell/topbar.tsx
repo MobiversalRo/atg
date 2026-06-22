@@ -1,4 +1,5 @@
 import { GlobalSearch } from '@/components/search/global-search';
+import { NotificationBell } from '@/components/notifications/notification-bell';
 import { LocaleSwitcher } from './locale-switcher';
 import { MobileNav } from './mobile-nav';
 import { UserMenu } from './user-menu';
@@ -12,6 +13,7 @@ export function Topbar() {
         <GlobalSearch />
       </div>
       <div className="ml-auto flex items-center gap-2">
+        <NotificationBell />
         <LocaleSwitcher />
         <UserMenu />
       </div>

@@ -185,5 +185,14 @@
     "role_admin": "Administrator",
     "role_manager": "Manager",
     "role_operator": "Operator"
+  },
+  "notifications": {
+    "title": "Notificări",
+    "check": "Verifică scadențe",
+    "checked": "{count} notificări noi",
+    "markRead": "Marchează citit",
+    "empty": "Nicio notificare",
+    "type_lease_due": "Arendă scadentă curând",
+    "type_lease_overdue": "Arendă restantă"
   }
 }
