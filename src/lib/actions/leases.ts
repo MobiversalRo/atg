@@ -48,3 +48,51 @@ export async function deleteLease(id: string): Promise<{ error?: string }> {
   revalidatePath('/[locale]/farm', 'page');
   return {};
 }
+
+export type LeaseBillingRow = {
+  id: string;
+  owner_name: string;
+  contract_number: string | null;
+  expiry_date: string | null;
+  amount: number | null;
+  payment_status: 'paid' | 'unpaid';
+  parcel_label: string | null;
+  area_sqm: number;
+};
+
+/** Lease rows enriched with parcel CF + area for the billing-support view (CF-9). */
+export async function listLeaseBilling(): Promise<{ data: LeaseBillingRow[]; error?: string }> {
+  const supabase = await createClient();
+  const [{ data: leases, error }, { data: parcels }] = await Promise.all([
+    supabase.from('leases').select('*').order('expiry_date', { ascending: true }),
+    supabase.from('parcels').select('id, cf_current, topo_code, area_sqm'),
+  ]);
+  if (error) return { data: [], error: error.message };
+  const pMap = new Map((parcels ?? []).map((p) => [p.id, p]));
+  const rows = (leases ?? []).map((l) => {
+    const p = l.parcel_id ? pMap.get(l.parcel_id) : null;
+    return {
+      id: l.id,
+      owner_name: l.owner_name,
+      contract_number: l.contract_number,
+      expiry_date: l.expiry_date,
+      amount: l.amount,
+      payment_status: l.payment_status,
+      parcel_label: p ? (p.cf_current ?? p.topo_code) : null,
+      area_sqm: p?.area_sqm ?? 0,
+    };
+  });
+  return { data: rows };
+}
+
+/** Quick paid/unpaid toggle for the billing view (CF-9). RLS is the real boundary. */
+export async function setLeasePaymentStatus(
+  id: string,
+  status: 'paid' | 'unpaid',
+): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const { error } = await supabase.from('leases').update({ payment_status: status }).eq('id', id);
+  if (error) return { error: error.message };
+  revalidatePath('/[locale]/farm', 'page');
+  return {};
+}

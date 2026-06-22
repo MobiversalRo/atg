@@ -1,11 +1,12 @@
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { listParcels } from '@/lib/actions/parcels';
-import { listLeases } from '@/lib/actions/leases';
+import { listLeases, listLeaseBilling } from '@/lib/actions/leases';
 import { getSiloBoard } from '@/lib/actions/inventory';
 import { listProperties } from '@/lib/actions/properties';
 import { ParcelTable } from '@/components/farm/parcel-table';
 import { LeaseTable } from '@/components/farm/lease-table';
+import { LeaseBilling } from '@/components/farm/lease-billing';
 import { SiloBoard } from '@/components/farm/silo-board';
 
 export default async function FarmPage({
@@ -17,9 +18,10 @@ export default async function FarmPage({
   setRequestLocale(locale);
   const t = await getTranslations('farm');
 
-  const [parcelsRes, leasesRes, board, propsRes] = await Promise.all([
+  const [parcelsRes, leasesRes, billingRes, board, propsRes] = await Promise.all([
     listParcels(),
     listLeases(),
+    listLeaseBilling(),
     getSiloBoard(),
     listProperties(),
   ]);
@@ -34,6 +36,7 @@ export default async function FarmPage({
         <TabsList>
           <TabsTrigger value="parcels">{t('tabParcels')}</TabsTrigger>
           <TabsTrigger value="leases">{t('tabLeases')}</TabsTrigger>
+          <TabsTrigger value="billing">{t('tabBilling')}</TabsTrigger>
           <TabsTrigger value="silos">{t('tabSilos')}</TabsTrigger>
         </TabsList>
         <TabsContent value="parcels" className="pt-4">
@@ -41,6 +44,9 @@ export default async function FarmPage({
         </TabsContent>
         <TabsContent value="leases" className="pt-4">
           <LeaseTable data={leasesRes.data} parcels={parcelOptions} />
+        </TabsContent>
+        <TabsContent value="billing" className="pt-4">
+          <LeaseBilling data={billingRes.data} />
         </TabsContent>
         <TabsContent value="silos" className="pt-4">
           <SiloBoard silos={board.silos} crops={board.crops} />
