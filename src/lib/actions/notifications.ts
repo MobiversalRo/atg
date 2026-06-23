@@ -3,7 +3,6 @@
 import { revalidatePath } from 'next/cache';
 import { createClient } from '@/lib/supabase/server';
 import { leaseAlertStatus } from '@/lib/domain/alerts';
-import type { Enums } from '@/lib/supabase/types';
 
 /** Idempotently create due/overdue lease notifications and target them at lease/billing staff. */
 export async function generateLeaseNotifications(
@@ -18,9 +17,7 @@ export async function generateLeaseNotifications(
   const { data: staff } = await supabase
     .from('profiles')
     .select('id')
-    // 'accountant' is a valid DB role (CF-10) but the generated user_role enum is
-    // stale, so cast the filter values to the generated enum element type.
-    .in('role', ['admin', 'manager', 'accountant'] as Enums<'user_role'>[]);
+    .in('role', ['admin', 'manager', 'accountant']);
   const recipientIds = (staff ?? []).map((s) => s.id);
 
   let created = 0;

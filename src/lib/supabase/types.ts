@@ -831,7 +831,7 @@ export type Database = {
         | "agricultural_land"
         | "silo_storage"
       stock_txn_type: "in" | "out"
-      user_role: "admin" | "manager" | "operator"
+      user_role: "admin" | "manager" | "operator" | "accountant"
       yard_direction: "inbound" | "outbound"
       yard_status: "gate" | "scale" | "dock" | "exited"
     }
@@ -979,7 +979,7 @@ export const Constants = {
         "silo_storage",
       ],
       stock_txn_type: ["in", "out"],
-      user_role: ["admin", "manager", "operator"],
+      user_role: ["admin", "manager", "operator", "accountant"],
       yard_direction: ["inbound", "outbound"],
       yard_status: ["gate", "scale", "dock", "exited"],
     },
