@@ -24,6 +24,7 @@
     "farm": "Fermă",
     "yard": "Logistică curte",
     "dossiers": "Dosare",
+    "reports": "Rapoarte",
     "users": "Utilizatori"
   },
   "pages": {
@@ -153,6 +154,14 @@
     "status_intabulat": "Intabulat",
     "status_intabulat_cu_posesie": "Intabulat cu posesie",
     "status_posesie": "Posesie"
+  },
+  "reports": {
+    "title": "Rapoarte",
+    "totalParcels": "Total parcele",
+    "totalArea": "Suprafață totală",
+    "leasesDue": "Arende scadente (60 zile)",
+    "areaByUat": "Suprafață pe UAT",
+    "areaByStatus": "Suprafață pe status"
   },
   "documents": {
     "upload": "Încarcă document",

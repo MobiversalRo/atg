@@ -24,6 +24,7 @@
     "farm": "Farm",
     "yard": "Yard logistics",
     "dossiers": "Dossiers",
+    "reports": "Reports",
     "users": "Users"
   },
   "pages": {
@@ -153,6 +154,14 @@
     "status_intabulat": "Registered",
     "status_intabulat_cu_posesie": "Registered with possession",
     "status_posesie": "Possession"
+  },
+  "reports": {
+    "title": "Reports",
+    "totalParcels": "Total parcels",
+    "totalArea": "Total area",
+    "leasesDue": "Leases due (60 days)",
+    "areaByUat": "Area by UAT",
+    "areaByStatus": "Area by status"
   },
   "documents": {
     "upload": "Upload document",

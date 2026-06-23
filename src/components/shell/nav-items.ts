@@ -1,4 +1,4 @@
-import { Building2, FolderArchive, LayoutDashboard, Truck, Users, Wheat, type LucideIcon } from 'lucide-react';
+import { BarChart3, Building2, FolderArchive, LayoutDashboard, Truck, Users, Wheat, type LucideIcon } from 'lucide-react';
 import type { Role } from '@/lib/auth/rbac';
 
 export type NavItem = {
@@ -15,6 +15,7 @@ export const navItems: NavItem[] = [
   { href: '/farm', key: 'farm', icon: Wheat },
   { href: '/yard', key: 'yard', icon: Truck },
   { href: '/dossiers', key: 'dossiers', icon: FolderArchive },
+  { href: '/reports', key: 'reports', icon: BarChart3 },
   { href: '/users', key: 'users', icon: Users, adminOnly: true },
 ];
 
