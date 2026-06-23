@@ -201,7 +201,8 @@
     "role": "Rol",
     "role_admin": "Administrator",
     "role_manager": "Manager",
-    "role_operator": "Operator"
+    "role_operator": "Operator",
+    "role_accountant": "Contabil"
   },
   "notifications": {
     "title": "Notificări",

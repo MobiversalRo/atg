@@ -1,7 +1,7 @@
 -- ===========================================================================
 -- Seed data for local development. Re-run automatically by `supabase db reset`.
 -- Login users (password "password123"): admin@atg.local, manager@atg.local,
--- operator@atg.local. The on_auth_user_created trigger creates each profile;
+-- operator@atg.local, accountant@atg.local. The on_auth_user_created trigger creates each profile;
 -- we then promote it to the right role.
 -- ===========================================================================
 
@@ -19,7 +19,8 @@ select
 from (values
   ('11111111-1111-1111-1111-111111111111'::uuid, 'admin@atg.local', 'Admin ATG'),
   ('22222222-2222-2222-2222-222222222222'::uuid, 'manager@atg.local', 'Manager Fermă'),
-  ('33333333-3333-3333-3333-333333333333'::uuid, 'operator@atg.local', 'Operator Curte')
+  ('33333333-3333-3333-3333-333333333333'::uuid, 'operator@atg.local', 'Operator Curte'),
+  ('44444444-4444-4444-4444-444444444444'::uuid, 'accountant@atg.local', 'Contabil ATG')
 ) as u (id, email, full_name);
 
 insert into auth.identities (
@@ -33,7 +34,8 @@ select
 from (values
   ('11111111-1111-1111-1111-111111111111'::uuid, 'admin@atg.local'),
   ('22222222-2222-2222-2222-222222222222'::uuid, 'manager@atg.local'),
-  ('33333333-3333-3333-3333-333333333333'::uuid, 'operator@atg.local')
+  ('33333333-3333-3333-3333-333333333333'::uuid, 'operator@atg.local'),
+  ('44444444-4444-4444-4444-444444444444'::uuid, 'accountant@atg.local')
 ) as u (id, email);
 
 update profiles set role = 'admin', full_name = 'Admin ATG'
@@ -42,6 +44,8 @@ update profiles set role = 'manager', full_name = 'Manager Fermă'
   where id = '22222222-2222-2222-2222-222222222222';
 update profiles set role = 'operator', full_name = 'Operator Curte'
   where id = '33333333-3333-3333-3333-333333333333';
+update profiles set role = 'accountant', full_name = 'Contabil ATG'
+  where id = '44444444-4444-4444-4444-444444444444';
 
 -- --- Crops (nomenclator) ----------------------------------------------------
 insert into crops (id, name, name_en, color) values

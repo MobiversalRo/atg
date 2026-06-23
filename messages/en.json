@@ -201,7 +201,8 @@
     "role": "Role",
     "role_admin": "Admin",
     "role_manager": "Manager",
-    "role_operator": "Operator"
+    "role_operator": "Operator",
+    "role_accountant": "Accountant"
   },
   "notifications": {
     "title": "Notifications",
