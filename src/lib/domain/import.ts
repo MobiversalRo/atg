@@ -23,7 +23,7 @@ const nullable = (s: string | undefined) => {
   return v === '' ? null : v;
 };
 const stripDiacritics = (s: string) =>
-  s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  s.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
 /**
  * Map one raw Excel/CSV row (client's column headers) to a normalized parcel.

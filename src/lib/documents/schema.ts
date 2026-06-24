@@ -6,8 +6,8 @@ export const DOCUMENT_VARIANTS = ['original', 'copie', 'timbrat', 'legalizat'] a
 
 // Metadata accompanying an uploaded file (the file itself is handled separately).
 export const documentMetaSchema = z.object({
-  dossier_id: z.preprocess(emptyToNull, z.string().nullable()),
-  parcel_id: z.preprocess(emptyToNull, z.string().nullable()),
+  dossier_id: z.preprocess(emptyToNull, z.string().uuid().nullable()),
+  parcel_id: z.preprocess(emptyToNull, z.string().uuid().nullable()),
   document_type_id: z.preprocess(emptyToNull, z.string().nullable()),
   variant: z.preprocess(emptyToNull, z.enum(DOCUMENT_VARIANTS).nullable()),
   document_number: z.preprocess(emptyToNull, z.string().nullable()),
