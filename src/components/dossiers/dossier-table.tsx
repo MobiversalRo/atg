@@ -2,11 +2,13 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { Plus } from 'lucide-react';
-import { Link } from '@/i18n/navigation';
+import { Archive, Plus } from 'lucide-react';
+import { toast } from 'sonner';
+import { Link, useRouter } from '@/i18n/navigation';
 import { useSession } from '@/components/auth/session-provider';
 import { can } from '@/lib/auth/rbac';
 import type { Dossier } from '@/lib/dossiers/schema';
+import { archiveDossier } from '@/lib/actions/dossiers';
 import { DossierForm } from './dossier-form';
 import {
   Table,
@@ -17,13 +19,31 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 
 export function DossierTable({ rows }: { rows: Dossier[] }) {
   const t = useTranslations('dossiers');
   const tc = useTranslations('common');
+  const router = useRouter();
   const { role } = useSession();
   const canCreate = can(role, 'dossiers', 'create');
+  const canArchive = can(role, 'dossiers', 'delete');
   const [formOpen, setFormOpen] = React.useState(false);
+  const [archiving, setArchiving] = React.useState<Dossier | null>(null);
+
+  const colCount = 4 + (canArchive ? 1 : 0);
+
+  async function confirmArchive() {
+    if (!archiving) return;
+    const res = await archiveDossier(archiving.id);
+    setArchiving(null);
+    if (res?.error) {
+      toast.error(res.error);
+      return;
+    }
+    toast.success(tc('saved'));
+    router.refresh();
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -44,6 +64,7 @@ export function DossierTable({ rows }: { rows: Dossier[] }) {
               <TableHead>{t('holder')}</TableHead>
               <TableHead>{t('acquisitionDate')}</TableHead>
               <TableHead>{t('status')}</TableHead>
+              {canArchive ? <TableHead /> : null}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -60,11 +81,25 @@ export function DossierTable({ rows }: { rows: Dossier[] }) {
                   <TableCell>
                     {d.intabulare_status ? t(`status_${d.intabulare_status}`) : '—'}
                   </TableCell>
+                  {canArchive ? (
+                    <TableCell>
+                      <div className="flex justify-end">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          aria-label={t('archive')}
+                          onClick={() => setArchiving(d)}
+                        >
+                          <Archive className="size-4" />
+                        </Button>
+                      </div>
+                    </TableCell>
+                  ) : null}
                 </TableRow>
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
+                <TableCell colSpan={colCount} className="h-24 text-center text-muted-foreground">
                   {tc('noData')}
                 </TableCell>
               </TableRow>
@@ -74,6 +109,14 @@ export function DossierTable({ rows }: { rows: Dossier[] }) {
       </div>
 
       <DossierForm open={formOpen} onOpenChange={setFormOpen} />
+      <ConfirmDialog
+        open={!!archiving}
+        onOpenChange={(o) => !o && setArchiving(null)}
+        title={t('archiveConfirm')}
+        description={archiving?.dossier_number}
+        confirmLabel={t('archive')}
+        onConfirm={confirmArchive}
+      />
     </div>
   );
 }

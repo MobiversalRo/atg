@@ -44,3 +44,21 @@ test('admin can create a dossier (CF-1)', async ({ page }) => {
   await page.getByRole('button', { name: 'Salvează' }).click();
   await expect(page.getByRole('link', { name: num })).toBeVisible();
 });
+
+test('admin can archive (soft-delete) a dossier from the list (CF-4)', async ({ page }) => {
+  await login(page);
+  await page.goto('/ro/dossiers');
+  const num = `ARC-${Date.now()}`;
+  await page.getByRole('button', { name: 'Adaugă dosar' }).click();
+  await page.getByLabel('Număr dosar').fill(num);
+  await page.getByRole('button', { name: 'Salvează' }).click();
+  await expect(page.getByRole('link', { name: num })).toBeVisible();
+
+  await page
+    .getByRole('row', { name: new RegExp(num) })
+    .getByRole('button', { name: 'Arhivează' })
+    .click();
+  await page.getByRole('dialog').getByRole('button', { name: 'Arhivează' }).click();
+
+  await expect(page.getByRole('link', { name: num })).toHaveCount(0);
+});

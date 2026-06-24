@@ -260,6 +260,7 @@ export function ParcelTable({
         onOpenChange={(o) => !o && setArchiving(null)}
         title={t('archiveParcelConfirm')}
         description={archiving?.topo_code}
+        confirmLabel={t('archive')}
         onConfirm={confirmArchive}
       />
     </div>
