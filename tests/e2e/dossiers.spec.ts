@@ -33,3 +33,14 @@ test('uploading a document shows it, with no delete control (CF-4)', async ({ pa
   // CF-4: the document area exposes no delete affordance.
   await expect(page.getByRole('button', { name: /Șterge|Delete/i })).toHaveCount(0);
 });
+
+test('admin can create a dossier (CF-1)', async ({ page }) => {
+  await login(page);
+  await page.goto('/ro/dossiers');
+  const num = `TST-${Date.now()}`;
+  await page.getByRole('button', { name: 'Adaugă dosar' }).click();
+  await page.getByLabel('Număr dosar').fill(num);
+  await page.getByLabel('Titular').fill('Test Holder');
+  await page.getByRole('button', { name: 'Salvează' }).click();
+  await expect(page.getByRole('link', { name: num })).toBeVisible();
+});
