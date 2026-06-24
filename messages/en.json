@@ -84,6 +84,8 @@
     "addParcel": "Add parcel",
     "editParcel": "Edit parcel",
     "deleteParcelConfirm": "Delete this parcel?",
+    "archive": "Archive",
+    "archiveParcelConfirm": "Archive this parcel?",
     "topoCode": "Topo code",
     "areaHa": "Area (ha)",
     "haShort": "ha",

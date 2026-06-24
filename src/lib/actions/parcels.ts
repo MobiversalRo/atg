@@ -10,7 +10,7 @@ export type HistoryRow = { id: string; season_year: number; crop_name: string };
 export async function listParcels(): Promise<{ data: ParcelRow[]; error?: string }> {
   const supabase = await createClient();
   const [{ data: parcels, error }, { data: crops }] = await Promise.all([
-    supabase.from('parcels').select('*').order('topo_code'),
+    supabase.from('parcels').select('*').is('archived_at', null).order('topo_code'),
     supabase.from('crops').select('id, name, name_en'),
   ]);
   if (error) return { data: [], error: error.message };
@@ -42,10 +42,15 @@ export async function updateParcel(id: string, input: ParcelInput): Promise<{ er
   return {};
 }
 
-export async function deleteParcel(id: string): Promise<{ error?: string }> {
+export async function archiveParcel(id: string): Promise<{ error?: string }> {
   const supabase = await createClient();
-  const { error } = await supabase.from('parcels').delete().eq('id', id);
+  const { data: auth } = await supabase.auth.getUser();
+  const { error } = await supabase
+    .from('parcels')
+    .update({ archived_at: new Date().toISOString(), archived_by: auth.user?.id ?? null })
+    .eq('id', id);
   if (error) return { error: error.message };
+  await supabase.from('audit_log').insert({ entity: 'parcel', entity_id: id, action: 'archive' });
   revalidatePath('/[locale]/farm', 'page');
   return {};
 }

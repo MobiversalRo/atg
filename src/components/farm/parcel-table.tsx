@@ -2,14 +2,14 @@
 
 import * as React from 'react';
 import { useLocale, useTranslations } from 'next-intl';
-import { ArrowDownUp, Pencil, Plus, Trash2 } from 'lucide-react';
+import { Archive, ArrowDownUp, Pencil, Plus } from 'lucide-react';
 import { toast } from 'sonner';
 import { useRouter } from '@/i18n/navigation';
 import { useSession } from '@/components/auth/session-provider';
 import { can } from '@/lib/auth/rbac';
 import { sqmToHa } from '@/lib/domain/area';
 import { INTABULARE_STATUSES, type Crop } from '@/lib/farm/schema';
-import { deleteParcel, type ParcelRow } from '@/lib/actions/parcels';
+import { archiveParcel, type ParcelRow } from '@/lib/actions/parcels';
 import { ParcelForm } from './parcel-form';
 import {
   Table,
@@ -38,7 +38,7 @@ export function ParcelTable({
   const router = useRouter();
   const { role } = useSession();
   const canWrite = can(role, 'parcels', 'update');
-  const canDelete = can(role, 'parcels', 'delete');
+  const canArchive = can(role, 'parcels', 'delete');
 
   const [uatFilter, setUatFilter] = React.useState('');
   const [statusFilter, setStatusFilter] = React.useState('');
@@ -46,7 +46,7 @@ export function ParcelTable({
   const [groupByUat, setGroupByUat] = React.useState(false);
   const [formOpen, setFormOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<ParcelRow | null>(null);
-  const [deleting, setDeleting] = React.useState<ParcelRow | null>(null);
+  const [archiving, setArchiving] = React.useState<ParcelRow | null>(null);
 
   const nf = React.useMemo(
     () => new Intl.NumberFormat(locale === 'ro' ? 'ro-RO' : 'en-US'),
@@ -83,19 +83,19 @@ export function ParcelTable({
     return [...m.entries()];
   }, [rows, groupByUat]);
 
-  async function confirmDelete() {
-    if (!deleting) return;
-    const res = await deleteParcel(deleting.id);
-    setDeleting(null);
+  async function confirmArchive() {
+    if (!archiving) return;
+    const res = await archiveParcel(archiving.id);
+    setArchiving(null);
     if (res?.error) {
       toast.error(res.error);
       return;
     }
-    toast.success(tc('deleted'));
+    toast.success(tc('saved'));
     router.refresh();
   }
 
-  const showActions = canWrite || canDelete;
+  const showActions = canWrite || canArchive;
   const colCount = 6 + (showActions ? 1 : 0);
 
   function renderRow(p: ParcelRow) {
@@ -125,14 +125,14 @@ export function ParcelTable({
                   <Pencil className="size-4" />
                 </Button>
               ) : null}
-              {canDelete ? (
+              {canArchive ? (
                 <Button
                   variant="ghost"
                   size="icon"
-                  aria-label={tc('delete')}
-                  onClick={() => setDeleting(p)}
+                  aria-label={t('archive')}
+                  onClick={() => setArchiving(p)}
                 >
-                  <Trash2 className="size-4" />
+                  <Archive className="size-4" />
                 </Button>
               ) : null}
             </div>
@@ -256,11 +256,11 @@ export function ParcelTable({
         properties={properties}
       />
       <ConfirmDialog
-        open={!!deleting}
-        onOpenChange={(o) => !o && setDeleting(null)}
-        title={t('deleteParcelConfirm')}
-        description={deleting?.topo_code}
-        onConfirm={confirmDelete}
+        open={!!archiving}
+        onOpenChange={(o) => !o && setArchiving(null)}
+        title={t('archiveParcelConfirm')}
+        description={archiving?.topo_code}
+        onConfirm={confirmArchive}
       />
     </div>
   );

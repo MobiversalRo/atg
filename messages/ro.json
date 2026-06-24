@@ -84,6 +84,8 @@
     "addParcel": "Adaugă parcelă",
     "editParcel": "Editează parcelă",
     "deleteParcelConfirm": "Sigur ștergeți această parcelă?",
+    "archive": "Arhivează",
+    "archiveParcelConfirm": "Arhivați această parcelă?",
     "topoCode": "Cod topo",
     "areaHa": "Suprafață (ha)",
     "haShort": "ha",
