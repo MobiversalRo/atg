@@ -27,11 +27,14 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { NativeSelect } from '@/components/ui/native-select';
 
+type DossierOption = { id: string; dossier_number: string; original_holder: string | null };
+
 type FormValues = {
   topo_code: string;
   area_ha: string;
   current_crop_id: string;
   property_id: string;
+  dossier_id: string;
   notes: string;
 };
 
@@ -40,6 +43,7 @@ const blank: FormValues = {
   area_ha: '0',
   current_crop_id: '',
   property_id: '',
+  dossier_id: '',
   notes: '',
 };
 
@@ -49,6 +53,7 @@ function fromRow(p: ParcelRow): FormValues {
     area_ha: String(sqmToHa(p.area_sqm)),
     current_crop_id: p.current_crop_id ?? '',
     property_id: p.property_id ?? '',
+    dossier_id: p.dossier_id ?? '',
     notes: p.notes ?? '',
   };
 }
@@ -59,12 +64,14 @@ export function ParcelForm({
   editing,
   crops,
   properties,
+  dossiers,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   editing: ParcelRow | null;
   crops: Crop[];
   properties: { id: string; name: string }[];
+  dossiers: DossierOption[];
 }) {
   const t = useTranslations('farm');
   return (
@@ -80,6 +87,7 @@ export function ParcelForm({
             editing={editing}
             crops={crops}
             properties={properties}
+            dossiers={dossiers}
             onDone={() => onOpenChange(false)}
           />
         ) : null}
@@ -92,11 +100,13 @@ function ParcelFormBody({
   editing,
   crops,
   properties,
+  dossiers,
   onDone,
 }: {
   editing: ParcelRow | null;
   crops: Crop[];
   properties: { id: string; name: string }[];
+  dossiers: DossierOption[];
   onDone: () => void;
 }) {
   const t = useTranslations('farm');
@@ -186,6 +196,18 @@ function ParcelFormBody({
           {properties.map((p) => (
             <option key={p.id} value={p.id}>
               {p.name}
+            </option>
+          ))}
+        </NativeSelect>
+      </div>
+      <div className="grid gap-1.5">
+        <Label>{t('dossier')}</Label>
+        <NativeSelect {...register('dossier_id')}>
+          <option value="">—</option>
+          {dossiers.map((d) => (
+            <option key={d.id} value={d.id}>
+              {d.dossier_number}
+              {d.original_holder ? ` — ${d.original_holder}` : ''}
             </option>
           ))}
         </NativeSelect>

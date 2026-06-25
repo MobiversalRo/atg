@@ -27,10 +27,12 @@ export function ParcelTable({
   data,
   crops,
   properties,
+  dossiers,
 }: {
   data: ParcelRow[];
   crops: Crop[];
   properties: { id: string; name: string }[];
+  dossiers: { id: string; dossier_number: string; original_holder: string | null }[];
 }) {
   const t = useTranslations('farm');
   const tc = useTranslations('common');
@@ -254,6 +256,7 @@ export function ParcelTable({
         editing={editing}
         crops={crops}
         properties={properties}
+        dossiers={dossiers}
       />
       <ConfirmDialog
         open={!!archiving}
