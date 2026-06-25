@@ -1,7 +1,7 @@
 -- ===========================================================================
 -- Seed data for local development. Re-run automatically by `supabase db reset`.
 -- Login users (password "password123"): admin@atg.local, manager@atg.local,
--- operator@atg.local. The on_auth_user_created trigger creates each profile;
+-- operator@atg.local, accountant@atg.local. The on_auth_user_created trigger creates each profile;
 -- we then promote it to the right role.
 -- ===========================================================================
 
@@ -19,7 +19,8 @@ select
 from (values
   ('11111111-1111-1111-1111-111111111111'::uuid, 'admin@atg.local', 'Admin ATG'),
   ('22222222-2222-2222-2222-222222222222'::uuid, 'manager@atg.local', 'Manager Fermă'),
-  ('33333333-3333-3333-3333-333333333333'::uuid, 'operator@atg.local', 'Operator Curte')
+  ('33333333-3333-3333-3333-333333333333'::uuid, 'operator@atg.local', 'Operator Curte'),
+  ('44444444-4444-4444-4444-444444444444'::uuid, 'accountant@atg.local', 'Contabil ATG')
 ) as u (id, email, full_name);
 
 insert into auth.identities (
@@ -33,7 +34,8 @@ select
 from (values
   ('11111111-1111-1111-1111-111111111111'::uuid, 'admin@atg.local'),
   ('22222222-2222-2222-2222-222222222222'::uuid, 'manager@atg.local'),
-  ('33333333-3333-3333-3333-333333333333'::uuid, 'operator@atg.local')
+  ('33333333-3333-3333-3333-333333333333'::uuid, 'operator@atg.local'),
+  ('44444444-4444-4444-4444-444444444444'::uuid, 'accountant@atg.local')
 ) as u (id, email);
 
 update profiles set role = 'admin', full_name = 'Admin ATG'
@@ -42,6 +44,8 @@ update profiles set role = 'manager', full_name = 'Manager Fermă'
   where id = '22222222-2222-2222-2222-222222222222';
 update profiles set role = 'operator', full_name = 'Operator Curte'
   where id = '33333333-3333-3333-3333-333333333333';
+update profiles set role = 'accountant', full_name = 'Contabil ATG'
+  where id = '44444444-4444-4444-4444-444444444444';
 
 -- --- Crops (nomenclator) ----------------------------------------------------
 insert into crops (id, name, name_en, color) values
@@ -61,11 +65,11 @@ insert into properties (id, name, type, area_value, area_unit, energy_class, the
   ('b0000000-0000-0000-0000-000000000006', 'Teren Agricol Est', 'agricultural_land', 30, 'hectare', null, null, null, 'rented', 360000, 'RON');
 
 -- --- Parcels + rotation history ---------------------------------------------
-insert into parcels (id, topo_code, area_ha, current_crop_id, property_id, notes) values
-  ('c0000000-0000-0000-0000-000000000001', 'Topo 45', 45, 'a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000003', 'Sol cernoziom'),
-  ('c0000000-0000-0000-0000-000000000002', 'Topo 46', 30, 'a0000000-0000-0000-0000-000000000002', 'b0000000-0000-0000-0000-000000000006', null),
-  ('c0000000-0000-0000-0000-000000000003', 'Topo 50', 22, 'a0000000-0000-0000-0000-000000000003', null, null),
-  ('c0000000-0000-0000-0000-000000000004', 'Topo 51', 18, 'a0000000-0000-0000-0000-000000000004', null, null);
+insert into parcels (id, topo_code, area_sqm, current_crop_id, property_id, notes) values
+  ('c0000000-0000-0000-0000-000000000001', 'Topo 45', 450000, 'a0000000-0000-0000-0000-000000000001', 'b0000000-0000-0000-0000-000000000003', 'Sol cernoziom'),
+  ('c0000000-0000-0000-0000-000000000002', 'Topo 46', 300000, 'a0000000-0000-0000-0000-000000000002', 'b0000000-0000-0000-0000-000000000006', null),
+  ('c0000000-0000-0000-0000-000000000003', 'Topo 50', 220000, 'a0000000-0000-0000-0000-000000000003', null, null),
+  ('c0000000-0000-0000-0000-000000000004', 'Topo 51', 180000, 'a0000000-0000-0000-0000-000000000004', null, null);
 
 insert into parcel_crop_history (parcel_id, crop_id, season_year) values
   ('c0000000-0000-0000-0000-000000000001', 'a0000000-0000-0000-0000-000000000002', 2024),
@@ -98,3 +102,29 @@ insert into yard_trucks (plate_number, driver, cargo_crop_id, gross_weight, tare
   ('CJ-45-XYZ', 'Ion Marin', 'a0000000-0000-0000-0000-000000000002', null, 12000, 'inbound', 'gate', null),
   ('TM-99-ABC', 'Vasile Dinu', 'a0000000-0000-0000-0000-000000000003', 41000, 15000, 'inbound', 'dock', 'd0000000-0000-0000-0000-000000000003'),
   ('B-777-FRM', 'Andrei Luca', 'a0000000-0000-0000-0000-000000000001', 40000, 13500, 'outbound', 'exited', 'd0000000-0000-0000-0000-000000000001');
+
+-- --- AISM Faza 1: controlled lists + example dossiers -----------------------
+-- Land categories (OQ-22)
+insert into land_categories (code, name, name_en) values
+  ('arabil', 'Arabil', 'Arable'),
+  ('padure', 'Pădure', 'Forest')
+on conflict (code) do nothing;
+
+-- Document types (OQ-24, taxonomy from spec 7.4)
+insert into document_types (code, name, name_en, sort_order) values
+  ('antecontract', 'Antecontract de vânzare-cumpărare', 'Pre-sale agreement', 10),
+  ('cvc', 'Contract de vânzare-cumpărare', 'Sale-purchase contract', 20),
+  ('tp', 'Titlu de proprietate', 'Property title', 30),
+  ('cf', 'Extras / Carte funciară', 'Land registry extract', 40),
+  ('cadastral', 'Documente cadastrale', 'Cadastral documents', 50),
+  ('identitate', 'Acte de identificare personală', 'Personal ID documents', 60),
+  ('succesiune', 'Documente de succesiune / testament', 'Succession / will', 70),
+  ('olografa', 'Declarație olografă', 'Holographic declaration', 80)
+on conflict (code) do nothing;
+
+-- Example dossiers (acceptance fixtures: 101, 118, 940)
+insert into dossiers (dossier_number, acquisition_date, original_holder, intabulare_status) values
+  ('101', '2006-05-15', 'Kovacs Barna Stefan', 'intabulat'),
+  ('118', '2006-05-18', 'Simonca Gheorghe', 'intabulat_cu_posesie'),
+  ('940', '2007-06-26', 'Nagy Margareta-Terezia', 'intabulat')
+on conflict (dossier_number) do nothing;

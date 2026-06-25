@@ -12,9 +12,19 @@ export const TXN_TYPES = ['in', 'out'] as const;
 
 const emptyToNull = (v: unknown) => (v === '' || v === undefined ? null : v);
 
+export const INTABULARE_STATUSES = ['intabulat', 'intabulat_cu_posesie', 'posesie'] as const;
+
 export const parcelSchema = z.object({
   topo_code: z.string().min(1, 'Topo code is required'),
-  area_ha: z.coerce.number().min(0),
+  uat: z.preprocess(emptyToNull, z.string().nullable()),
+  cf_current: z.preprocess(emptyToNull, z.string().nullable()),
+  tp: z.preprocess(emptyToNull, z.string().nullable()),
+  area_sqm: z.coerce.number().min(0),
+  category_id: z.preprocess(emptyToNull, z.string().nullable()),
+  intabulare_status: z.preprocess(emptyToNull, z.enum(INTABULARE_STATUSES).nullable()),
+  ipotecat_holder: z.preprocess(emptyToNull, z.string().nullable()),
+  vanzator: z.preprocess(emptyToNull, z.string().nullable()),
+  dossier_id: z.preprocess(emptyToNull, z.string().nullable()),
   current_crop_id: z.preprocess(emptyToNull, z.string().nullable()),
   property_id: z.preprocess(emptyToNull, z.string().nullable()),
   notes: z.preprocess(emptyToNull, z.string().nullable()),

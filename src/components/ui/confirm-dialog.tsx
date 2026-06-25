@@ -16,12 +16,14 @@ export function ConfirmDialog({
   title,
   description,
   onConfirm,
+  confirmLabel,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   title: string;
   description?: string;
   onConfirm: () => void;
+  confirmLabel?: string;
 }) {
   const tc = useTranslations('common');
   return (
@@ -36,7 +38,7 @@ export function ConfirmDialog({
             {tc('cancel')}
           </Button>
           <Button variant="destructive" onClick={onConfirm}>
-            {tc('delete')}
+            {confirmLabel ?? tc('delete')}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -35,3 +35,23 @@ test('only admins can access user administration', () => {
   expect(can('manager', 'users', 'read')).toBe(false);
   expect(can('operator', 'users', 'read')).toBe(false);
 });
+
+test('accountant can update leases but not parcels', () => {
+  expect(can('accountant', 'leases', 'update')).toBe(true);
+  expect(can('accountant', 'parcels', 'update')).toBe(false);
+});
+
+test('no role can delete documents (CF-4)', () => {
+  for (const r of ['admin', 'manager', 'operator', 'accountant'] as const) {
+    expect(can(r, 'documents', 'delete')).toBe(false);
+  }
+});
+
+test('only admin can archive (delete-equivalent) dossiers', () => {
+  expect(can('admin', 'dossiers', 'delete')).toBe(true);
+  expect(can('manager', 'dossiers', 'delete')).toBe(false);
+});
+
+test('operator can upload documents', () => {
+  expect(can('operator', 'documents', 'create')).toBe(true);
+});

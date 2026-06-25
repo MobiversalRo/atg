@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-export const USER_ROLES = ['admin', 'manager', 'operator'] as const;
+export const USER_ROLES = ['admin', 'manager', 'operator', 'accountant'] as const;
 
 const emptyToNull = (v: unknown) => (v === '' || v === undefined ? null : v);
 const isEmail = (v: string) => /.+@.+\..+/.test(v);

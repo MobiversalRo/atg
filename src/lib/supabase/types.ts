@@ -34,6 +34,44 @@ export type Database = {
   }
   public: {
     Tables: {
+      audit_log: {
+        Row: {
+          action: string
+          actor: string | null
+          at: string
+          diff: Json | null
+          entity: string
+          entity_id: string
+          id: string
+        }
+        Insert: {
+          action: string
+          actor?: string | null
+          at?: string
+          diff?: Json | null
+          entity: string
+          entity_id: string
+          id?: string
+        }
+        Update: {
+          action?: string
+          actor?: string | null
+          at?: string
+          diff?: Json | null
+          entity?: string
+          entity_id?: string
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "audit_log_actor_fkey"
+            columns: ["actor"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crops: {
         Row: {
           color: string
@@ -49,6 +87,188 @@ export type Database = {
         }
         Update: {
           color?: string
+          id?: string
+          name?: string
+          name_en?: string
+        }
+        Relationships: []
+      }
+      document_types: {
+        Row: {
+          code: string
+          id: string
+          name: string
+          name_en: string
+          sort_order: number
+        }
+        Insert: {
+          code: string
+          id?: string
+          name: string
+          name_en: string
+          sort_order?: number
+        }
+        Update: {
+          code?: string
+          id?: string
+          name?: string
+          name_en?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      documents: {
+        Row: {
+          archived_at: string | null
+          archived_by: string | null
+          created_at: string
+          document_date: string | null
+          document_number: string | null
+          document_type_id: string | null
+          dossier_id: string | null
+          id: string
+          mime_type: string | null
+          original_filename: string
+          parcel_id: string | null
+          storage_path: string
+          uploaded_by: string | null
+          variant: Database["public"]["Enums"]["document_variant"] | null
+        }
+        Insert: {
+          archived_at?: string | null
+          archived_by?: string | null
+          created_at?: string
+          document_date?: string | null
+          document_number?: string | null
+          document_type_id?: string | null
+          dossier_id?: string | null
+          id?: string
+          mime_type?: string | null
+          original_filename: string
+          parcel_id?: string | null
+          storage_path: string
+          uploaded_by?: string | null
+          variant?: Database["public"]["Enums"]["document_variant"] | null
+        }
+        Update: {
+          archived_at?: string | null
+          archived_by?: string | null
+          created_at?: string
+          document_date?: string | null
+          document_number?: string | null
+          document_type_id?: string | null
+          dossier_id?: string | null
+          id?: string
+          mime_type?: string | null
+          original_filename?: string
+          parcel_id?: string | null
+          storage_path?: string
+          uploaded_by?: string | null
+          variant?: Database["public"]["Enums"]["document_variant"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "documents_archived_by_fkey"
+            columns: ["archived_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_document_type_id_fkey"
+            columns: ["document_type_id"]
+            isOneToOne: false
+            referencedRelation: "document_types"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_dossier_id_fkey"
+            columns: ["dossier_id"]
+            isOneToOne: false
+            referencedRelation: "dossiers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_parcel_id_fkey"
+            columns: ["parcel_id"]
+            isOneToOne: false
+            referencedRelation: "parcels"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "documents_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dossiers: {
+        Row: {
+          acquisition_date: string | null
+          archived_at: string | null
+          archived_by: string | null
+          created_at: string
+          dossier_number: string
+          id: string
+          intabulare_status:
+            | Database["public"]["Enums"]["intabulare_status"]
+            | null
+          original_holder: string | null
+          updated_at: string
+        }
+        Insert: {
+          acquisition_date?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
+          created_at?: string
+          dossier_number: string
+          id?: string
+          intabulare_status?:
+            | Database["public"]["Enums"]["intabulare_status"]
+            | null
+          original_holder?: string | null
+          updated_at?: string
+        }
+        Update: {
+          acquisition_date?: string | null
+          archived_at?: string | null
+          archived_by?: string | null
+          created_at?: string
+          dossier_number?: string
+          id?: string
+          intabulare_status?:
+            | Database["public"]["Enums"]["intabulare_status"]
+            | null
+          original_holder?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dossiers_archived_by_fkey"
+            columns: ["archived_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      land_categories: {
+        Row: {
+          code: string
+          id: string
+          name: string
+          name_en: string
+        }
+        Insert: {
+          code: string
+          id?: string
+          name: string
+          name_en: string
+        }
+        Update: {
+          code?: string
           id?: string
           name?: string
           name_en?: string
@@ -108,6 +328,103 @@ export type Database = {
           },
         ]
       }
+      notification_recipients: {
+        Row: {
+          notification_id: string
+          profile_id: string
+        }
+        Insert: {
+          notification_id: string
+          profile_id: string
+        }
+        Update: {
+          notification_id?: string
+          profile_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_recipients_notification_id_fkey"
+            columns: ["notification_id"]
+            isOneToOne: false
+            referencedRelation: "notifications"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_recipients_profile_id_fkey"
+            columns: ["profile_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notifications: {
+        Row: {
+          created_at: string
+          due_date: string | null
+          id: string
+          lead_days: number
+          lease_id: string | null
+          read_at: string | null
+          status: Database["public"]["Enums"]["lease_payment_status"]
+          type: Database["public"]["Enums"]["notification_type"]
+        }
+        Insert: {
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          lead_days?: number
+          lease_id?: string | null
+          read_at?: string | null
+          status?: Database["public"]["Enums"]["lease_payment_status"]
+          type: Database["public"]["Enums"]["notification_type"]
+        }
+        Update: {
+          created_at?: string
+          due_date?: string | null
+          id?: string
+          lead_days?: number
+          lease_id?: string | null
+          read_at?: string | null
+          status?: Database["public"]["Enums"]["lease_payment_status"]
+          type?: Database["public"]["Enums"]["notification_type"]
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notifications_lease_id_fkey"
+            columns: ["lease_id"]
+            isOneToOne: false
+            referencedRelation: "leases"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      parcel_cf_aliases: {
+        Row: {
+          cf_number: string
+          id: string
+          parcel_id: string
+        }
+        Insert: {
+          cf_number: string
+          id?: string
+          parcel_id: string
+        }
+        Update: {
+          cf_number?: string
+          id?: string
+          parcel_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "parcel_cf_aliases_parcel_id_fkey"
+            columns: ["parcel_id"]
+            isOneToOne: false
+            referencedRelation: "parcels"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       parcel_crop_history: {
         Row: {
           crop_id: string
@@ -146,41 +463,98 @@ export type Database = {
       }
       parcels: {
         Row: {
-          area_ha: number
+          archived_at: string | null
+          archived_by: string | null
+          area_sqm: number
+          category_id: string | null
+          cf_current: string | null
           created_at: string
           current_crop_id: string | null
+          dossier_id: string | null
           id: string
+          intabulare_status:
+            | Database["public"]["Enums"]["intabulare_status"]
+            | null
+          ipotecat_holder: string | null
           notes: string | null
           property_id: string | null
           topo_code: string
+          tp: string | null
+          uat: string | null
           updated_at: string
+          vanzator: string | null
         }
         Insert: {
-          area_ha?: number
+          archived_at?: string | null
+          archived_by?: string | null
+          area_sqm?: number
+          category_id?: string | null
+          cf_current?: string | null
           created_at?: string
           current_crop_id?: string | null
+          dossier_id?: string | null
           id?: string
+          intabulare_status?:
+            | Database["public"]["Enums"]["intabulare_status"]
+            | null
+          ipotecat_holder?: string | null
           notes?: string | null
           property_id?: string | null
           topo_code: string
+          tp?: string | null
+          uat?: string | null
           updated_at?: string
+          vanzator?: string | null
         }
         Update: {
-          area_ha?: number
+          archived_at?: string | null
+          archived_by?: string | null
+          area_sqm?: number
+          category_id?: string | null
+          cf_current?: string | null
           created_at?: string
           current_crop_id?: string | null
+          dossier_id?: string | null
           id?: string
+          intabulare_status?:
+            | Database["public"]["Enums"]["intabulare_status"]
+            | null
+          ipotecat_holder?: string | null
           notes?: string | null
           property_id?: string | null
           topo_code?: string
+          tp?: string | null
+          uat?: string | null
           updated_at?: string
+          vanzator?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "parcels_archived_by_fkey"
+            columns: ["archived_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parcels_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "land_categories"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "parcels_current_crop_id_fkey"
             columns: ["current_crop_id"]
             isOneToOne: false
             referencedRelation: "crops"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "parcels_dossier_id_fkey"
+            columns: ["dossier_id"]
+            isOneToOne: false
+            referencedRelation: "dossiers"
             referencedColumns: ["id"]
           },
           {
@@ -429,12 +803,27 @@ export type Database = {
         Args: never
         Returns: Database["public"]["Enums"]["user_role"]
       }
+      search_all: {
+        Args: { q: string }
+        Returns: {
+          id: string
+          kind: string
+          label: string
+          sub: string
+        }[]
+      }
+      show_limit: { Args: never; Returns: number }
+      show_trgm: { Args: { "": string }; Returns: string[] }
+      unaccent: { Args: { "": string }; Returns: string }
     }
     Enums: {
       area_unit: "sqm" | "hectare"
       currency: "RON" | "EUR"
+      document_variant: "original" | "copie" | "timbrat" | "legalizat"
+      intabulare_status: "intabulat" | "intabulat_cu_posesie" | "posesie"
       lease_payment_method: "cash" | "in_kind"
       lease_payment_status: "paid" | "unpaid"
+      notification_type: "lease_due" | "lease_overdue"
       property_status: "rented" | "vacant" | "conservation" | "own_use"
       property_type:
         | "residential"
@@ -442,7 +831,7 @@ export type Database = {
         | "agricultural_land"
         | "silo_storage"
       stock_txn_type: "in" | "out"
-      user_role: "admin" | "manager" | "operator"
+      user_role: "admin" | "manager" | "operator" | "accountant"
       yard_direction: "inbound" | "outbound"
       yard_status: "gate" | "scale" | "dock" | "exited"
     }
@@ -577,8 +966,11 @@ export const Constants = {
     Enums: {
       area_unit: ["sqm", "hectare"],
       currency: ["RON", "EUR"],
+      document_variant: ["original", "copie", "timbrat", "legalizat"],
+      intabulare_status: ["intabulat", "intabulat_cu_posesie", "posesie"],
       lease_payment_method: ["cash", "in_kind"],
       lease_payment_status: ["paid", "unpaid"],
+      notification_type: ["lease_due", "lease_overdue"],
       property_status: ["rented", "vacant", "conservation", "own_use"],
       property_type: [
         "residential",
@@ -587,7 +979,7 @@ export const Constants = {
         "silo_storage",
       ],
       stock_txn_type: ["in", "out"],
-      user_role: ["admin", "manager", "operator"],
+      user_role: ["admin", "manager", "operator", "accountant"],
       yard_direction: ["inbound", "outbound"],
       yard_status: ["gate", "scale", "dock", "exited"],
     },
