@@ -45,7 +45,7 @@ test('admin can create a dossier (CF-1)', async ({ page }) => {
   await expect(page.getByRole('link', { name: num })).toBeVisible();
 });
 
-test('admin can archive (soft-delete) a dossier from the list (CF-4)', async ({ page }) => {
+test('admin can archive then restore a dossier (CF-4 soft-delete)', async ({ page }) => {
   await login(page);
   await page.goto('/ro/dossiers');
   const num = `ARC-${Date.now()}`;
@@ -54,11 +54,23 @@ test('admin can archive (soft-delete) a dossier from the list (CF-4)', async ({ 
   await page.getByRole('button', { name: 'Salvează' }).click();
   await expect(page.getByRole('link', { name: num })).toBeVisible();
 
+  // archive from the active list
   await page
     .getByRole('row', { name: new RegExp(num) })
     .getByRole('button', { name: 'Arhivează' })
     .click();
   await page.getByRole('dialog').getByRole('button', { name: 'Arhivează' }).click();
+  await expect(page.getByRole('link', { name: num })).not.toBeVisible();
 
-  await expect(page.getByRole('link', { name: num })).toHaveCount(0);
+  // it now lives under the Archived tab — restore it
+  await page.getByRole('tab', { name: /Arhivate/ }).click();
+  await page
+    .getByRole('row', { name: new RegExp(num) })
+    .getByRole('button', { name: 'Restaurează' })
+    .click();
+  await expect(page.getByRole('link', { name: num })).not.toBeVisible();
+
+  // and it is back under Active
+  await page.getByRole('tab', { name: 'Active' }).click();
+  await expect(page.getByRole('link', { name: num })).toBeVisible();
 });

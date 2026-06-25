@@ -48,3 +48,26 @@ export async function archiveDossier(id: string): Promise<{ error?: string }> {
   revalidatePath('/[locale]/dossiers', 'page');
   return {};
 }
+
+export async function listArchivedDossiers(): Promise<{ data: Dossier[]; error?: string }> {
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from('dossiers')
+    .select('*')
+    .not('archived_at', 'is', null)
+    .order('dossier_number');
+  if (error) return { data: [], error: error.message };
+  return { data: data ?? [] };
+}
+
+export async function unarchiveDossier(id: string): Promise<{ error?: string }> {
+  const supabase = await createClient();
+  const { error } = await supabase
+    .from('dossiers')
+    .update({ archived_at: null, archived_by: null })
+    .eq('id', id);
+  if (error) return { error: error.message };
+  await supabase.from('audit_log').insert({ entity: 'dossier', entity_id: id, action: 'restore' });
+  revalidatePath('/[locale]/dossiers', 'page');
+  return {};
+}

@@ -154,6 +154,10 @@
     "documents": "Documente",
     "archive": "Arhivează",
     "archiveConfirm": "Arhivați acest dosar?",
+    "tabActive": "Active",
+    "tabArchived": "Arhivate",
+    "restore": "Restaurează",
+    "noArchived": "Niciun dosar arhivat",
     "status_intabulat": "Intabulat",
     "status_intabulat_cu_posesie": "Intabulat cu posesie",
     "status_posesie": "Posesie"

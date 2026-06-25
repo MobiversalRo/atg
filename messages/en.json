@@ -154,6 +154,10 @@
     "documents": "Documents",
     "archive": "Archive",
     "archiveConfirm": "Archive this dossier?",
+    "tabActive": "Active",
+    "tabArchived": "Archived",
+    "restore": "Restore",
+    "noArchived": "No archived dossiers",
     "status_intabulat": "Registered",
     "status_intabulat_cu_posesie": "Registered with possession",
     "status_posesie": "Possession"
