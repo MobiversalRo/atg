@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form';
 import { useTranslations } from 'next-intl';
 import { toast } from 'sonner';
 import { useRouter } from '@/i18n/navigation';
-import { createDossier } from '@/lib/actions/dossiers';
-import { dossierSchema, INTABULARE_STATUSES } from '@/lib/dossiers/schema';
+import { createDossier, updateDossier } from '@/lib/actions/dossiers';
+import { dossierSchema, INTABULARE_STATUSES, type Dossier } from '@/lib/dossiers/schema';
 import {
   Sheet,
   SheetContent,
@@ -33,12 +33,23 @@ const blank: FormValues = {
   intabulare_status: '',
 };
 
+function fromDossier(d: Dossier): FormValues {
+  return {
+    dossier_number: d.dossier_number,
+    original_holder: d.original_holder ?? '',
+    acquisition_date: d.acquisition_date ?? '',
+    intabulare_status: d.intabulare_status ?? '',
+  };
+}
+
 export function DossierForm({
   open,
   onOpenChange,
+  editing,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  editing?: Dossier | null;
 }) {
   const t = useTranslations('dossiers');
   const tc = useTranslations('common');
@@ -51,8 +62,8 @@ export function DossierForm({
   } = useForm<FormValues>({ defaultValues: blank });
 
   React.useEffect(() => {
-    if (open) reset(blank);
-  }, [open, reset]);
+    if (open) reset(editing ? fromDossier(editing) : blank);
+  }, [open, editing, reset]);
 
   async function onSubmit(values: FormValues) {
     const parsed = dossierSchema.safeParse(values);
@@ -60,7 +71,9 @@ export function DossierForm({
       toast.error(parsed.error.issues[0]?.message ?? tc('invalid'));
       return;
     }
-    const res = await createDossier(parsed.data);
+    const res = editing
+      ? await updateDossier(editing.id, parsed.data)
+      : await createDossier(parsed.data);
     if (res?.error) {
       toast.error(res.error);
       return;
@@ -74,7 +87,7 @@ export function DossierForm({
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent side="right" className="w-full overflow-y-auto sm:max-w-md">
         <SheetHeader>
-          <SheetTitle>{t('addDossier')}</SheetTitle>
+          <SheetTitle>{editing ? t('editDossier') : t('addDossier')}</SheetTitle>
         </SheetHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 p-4">
           <div className="grid gap-1.5">

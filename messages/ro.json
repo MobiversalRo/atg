@@ -146,6 +146,7 @@
   "dossiers": {
     "title": "Dosare de dobândire",
     "addDossier": "Adaugă dosar",
+    "editDossier": "Editează dosar",
     "number": "Număr dosar",
     "holder": "Titular",
     "acquisitionDate": "Data dobândirii",

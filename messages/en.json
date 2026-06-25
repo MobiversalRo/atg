@@ -146,6 +146,7 @@
   "dossiers": {
     "title": "Acquisition dossiers",
     "addDossier": "Add dossier",
+    "editDossier": "Edit dossier",
     "number": "Dossier number",
     "holder": "Holder",
     "acquisitionDate": "Acquisition date",

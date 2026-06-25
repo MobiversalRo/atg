@@ -74,3 +74,25 @@ test('admin can archive then restore a dossier (CF-4 soft-delete)', async ({ pag
   await page.getByRole('tab', { name: 'Active' }).click();
   await expect(page.getByRole('link', { name: num })).toBeVisible();
 });
+
+test('admin can edit a dossier (CF-1)', async ({ page }) => {
+  await login(page);
+  await page.goto('/ro/dossiers');
+  const num = `EDT-${Date.now()}`;
+  await page.getByRole('button', { name: 'Adaugă dosar' }).click();
+  await page.getByLabel('Număr dosar').fill(num);
+  await page.getByLabel('Titular').fill('Before');
+  await page.getByRole('button', { name: 'Salvează' }).click();
+  await expect(page.getByRole('link', { name: num })).toBeVisible();
+
+  await page
+    .getByRole('row', { name: new RegExp(num) })
+    .getByRole('button', { name: 'Editează' })
+    .click();
+  await page.getByLabel('Titular').fill('After Edit');
+  await page.getByRole('button', { name: 'Salvează' }).click();
+
+  await expect(
+    page.getByRole('row', { name: new RegExp(num) }).getByText('After Edit'),
+  ).toBeVisible();
+});

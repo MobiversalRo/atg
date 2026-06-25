@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { Archive } from 'lucide-react';
+import { Archive, Pencil } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link, useRouter } from '@/i18n/navigation';
 import { useSession } from '@/components/auth/session-provider';
@@ -20,15 +20,23 @@ import {
 import { Button } from '@/components/ui/button';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 
-export function DossierTable({ rows }: { rows: Dossier[] }) {
+export function DossierTable({
+  rows,
+  onEdit,
+}: {
+  rows: Dossier[];
+  onEdit?: (d: Dossier) => void;
+}) {
   const t = useTranslations('dossiers');
   const tc = useTranslations('common');
   const router = useRouter();
   const { role } = useSession();
   const canArchive = can(role, 'dossiers', 'delete');
+  const canEdit = can(role, 'dossiers', 'update') && !!onEdit;
   const [archiving, setArchiving] = React.useState<Dossier | null>(null);
 
-  const colCount = 4 + (canArchive ? 1 : 0);
+  const showActions = canEdit || canArchive;
+  const colCount = 4 + (showActions ? 1 : 0);
 
   async function confirmArchive() {
     if (!archiving) return;
@@ -52,7 +60,7 @@ export function DossierTable({ rows }: { rows: Dossier[] }) {
               <TableHead>{t('holder')}</TableHead>
               <TableHead>{t('acquisitionDate')}</TableHead>
               <TableHead>{t('status')}</TableHead>
-              {canArchive ? <TableHead /> : null}
+              {showActions ? <TableHead /> : null}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -69,17 +77,29 @@ export function DossierTable({ rows }: { rows: Dossier[] }) {
                   <TableCell>
                     {d.intabulare_status ? t(`status_${d.intabulare_status}`) : '—'}
                   </TableCell>
-                  {canArchive ? (
+                  {showActions ? (
                     <TableCell>
-                      <div className="flex justify-end">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          aria-label={t('archive')}
-                          onClick={() => setArchiving(d)}
-                        >
-                          <Archive className="size-4" />
-                        </Button>
+                      <div className="flex justify-end gap-1">
+                        {canEdit ? (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={tc('edit')}
+                            onClick={() => onEdit?.(d)}
+                          >
+                            <Pencil className="size-4" />
+                          </Button>
+                        ) : null}
+                        {canArchive ? (
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            aria-label={t('archive')}
+                            onClick={() => setArchiving(d)}
+                          >
+                            <Archive className="size-4" />
+                          </Button>
+                        ) : null}
                       </div>
                     </TableCell>
                   ) : null}

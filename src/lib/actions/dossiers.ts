@@ -36,6 +36,17 @@ export async function createDossier(input: DossierInput): Promise<{ error?: stri
   return {};
 }
 
+export async function updateDossier(id: string, input: DossierInput): Promise<{ error?: string }> {
+  const parsed = dossierSchema.safeParse(input);
+  if (!parsed.success) return { error: 'Invalid input' };
+  const supabase = await createClient();
+  const { error } = await supabase.from('dossiers').update(parsed.data).eq('id', id);
+  if (error) return { error: error.message };
+  await supabase.from('audit_log').insert({ entity: 'dossier', entity_id: id, action: 'update' });
+  revalidatePath('/[locale]/dossiers', 'page');
+  return {};
+}
+
 export async function archiveDossier(id: string): Promise<{ error?: string }> {
   const supabase = await createClient();
   const { data: auth } = await supabase.auth.getUser();
