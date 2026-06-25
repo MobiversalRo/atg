@@ -2,14 +2,13 @@
 
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { Archive, Plus } from 'lucide-react';
+import { Archive } from 'lucide-react';
 import { toast } from 'sonner';
 import { Link, useRouter } from '@/i18n/navigation';
 import { useSession } from '@/components/auth/session-provider';
 import { can } from '@/lib/auth/rbac';
 import type { Dossier } from '@/lib/dossiers/schema';
 import { archiveDossier } from '@/lib/actions/dossiers';
-import { DossierForm } from './dossier-form';
 import {
   Table,
   TableBody,
@@ -26,9 +25,7 @@ export function DossierTable({ rows }: { rows: Dossier[] }) {
   const tc = useTranslations('common');
   const router = useRouter();
   const { role } = useSession();
-  const canCreate = can(role, 'dossiers', 'create');
   const canArchive = can(role, 'dossiers', 'delete');
-  const [formOpen, setFormOpen] = React.useState(false);
   const [archiving, setArchiving] = React.useState<Dossier | null>(null);
 
   const colCount = 4 + (canArchive ? 1 : 0);
@@ -46,16 +43,7 @@ export function DossierTable({ rows }: { rows: Dossier[] }) {
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      {canCreate ? (
-        <div className="flex justify-end">
-          <Button size="sm" onClick={() => setFormOpen(true)}>
-            <Plus className="size-4" />
-            {t('addDossier')}
-          </Button>
-        </div>
-      ) : null}
-
+    <>
       <div className="overflow-x-auto rounded-md border">
         <Table>
           <TableHeader>
@@ -107,8 +95,6 @@ export function DossierTable({ rows }: { rows: Dossier[] }) {
           </TableBody>
         </Table>
       </div>
-
-      <DossierForm open={formOpen} onOpenChange={setFormOpen} />
       <ConfirmDialog
         open={!!archiving}
         onOpenChange={(o) => !o && setArchiving(null)}
@@ -117,6 +103,6 @@ export function DossierTable({ rows }: { rows: Dossier[] }) {
         confirmLabel={t('archive')}
         onConfirm={confirmArchive}
       />
-    </div>
+    </>
   );
 }
