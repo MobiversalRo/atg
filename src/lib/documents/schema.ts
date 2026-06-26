@@ -14,3 +14,12 @@ export const documentMetaSchema = z.object({
   document_date: z.preprocess(emptyToNull, z.string().nullable()),
 });
 export type DocumentMetaInput = z.infer<typeof documentMetaSchema>;
+
+// Editable metadata only (the file itself is immutable, CF-4).
+export const documentEditSchema = documentMetaSchema.pick({
+  document_type_id: true,
+  variant: true,
+  document_number: true,
+  document_date: true,
+});
+export type DocumentEditInput = z.infer<typeof documentEditSchema>;

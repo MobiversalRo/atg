@@ -20,7 +20,12 @@ export async function getDossier(id: string) {
   const [{ data: dossier }, { data: parcels }, { data: documents }] = await Promise.all([
     supabase.from('dossiers').select('*').eq('id', id).single(),
     supabase.from('parcels').select('*').eq('dossier_id', id).is('archived_at', null),
-    supabase.from('documents').select('*').eq('dossier_id', id).is('archived_at', null),
+    supabase
+      .from('documents')
+      .select('*')
+      .eq('dossier_id', id)
+      .is('archived_at', null)
+      .order('created_at', { ascending: false }),
   ]);
   return { dossier, parcels: parcels ?? [], documents: documents ?? [] };
 }
