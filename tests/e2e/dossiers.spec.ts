@@ -29,7 +29,7 @@ test('uploading a document shows it, with no delete control (CF-4)', async ({ pa
   });
   await page.getByRole('button', { name: 'Încarcă document' }).click();
 
-  await expect(page.getByText('extras-cf.pdf')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'extras-cf.pdf' })).toBeVisible();
   // CF-4: the document area exposes no delete affordance.
   await expect(page.getByRole('button', { name: /Șterge|Delete/i })).toHaveCount(0);
 });
@@ -107,7 +107,7 @@ test('clicking a document row opens the edit pop-up and saves metadata (Req 4)',
     buffer: Buffer.from('%PDF-1.4'),
   });
   await page.getByRole('button', { name: 'Încarcă document' }).click();
-  await expect(page.getByText('meta-test.pdf')).toBeVisible();
+  await expect(page.getByRole('cell', { name: 'meta-test.pdf' })).toBeVisible();
 
   await page.getByRole('cell', { name: 'meta-test.pdf' }).click();
   const dialog = page.getByRole('dialog');
