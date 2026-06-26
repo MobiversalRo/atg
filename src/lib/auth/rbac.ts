@@ -14,8 +14,12 @@ const MANAGER_WRITE: Resource[] = ['properties', 'parcels', 'leases', 'storage',
  * CF-4: nothing is hard-deletable; 'delete' on dossiers means admin-only soft archive.
  */
 export function can(role: Role, resource: Resource, action: Action): boolean {
-  // CF-4: documents are never deletable by anyone.
-  if (resource === 'documents' && action === 'delete') return false;
+  // Documents: never deletable (CF-4); read by all; create/update by admin+manager+operator.
+  if (resource === 'documents') {
+    if (action === 'delete') return false;
+    if (action === 'read') return true;
+    return role === 'admin' || role === 'manager' || role === 'operator';
+  }
   // Soft-archive of structural records is admin-only.
   if (action === 'delete' && (resource === 'dossiers' || resource === 'parcels')) return role === 'admin';
 
@@ -32,6 +36,5 @@ export function can(role: Role, resource: Resource, action: Action): boolean {
   // operator
   if (resource === 'yard_trucks') return true;
   if (resource === 'inventory' && action === 'create') return true;
-  if (resource === 'documents' && action === 'create') return true; // operators upload scans
   return false;
 }
