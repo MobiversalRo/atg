@@ -2,6 +2,7 @@ import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { AlertTriangle, Building2, TrendingUp, Wheat } from 'lucide-react';
 import { Link } from '@/i18n/navigation';
 import { getDashboard } from '@/lib/actions/dashboard';
+import { formatDate } from '@/lib/domain/date';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default async function DashboardPage({
@@ -100,7 +101,7 @@ export default async function DashboardPage({
                 {data.expiringLeases.map((l) => (
                   <li key={l.id} className="flex justify-between gap-2">
                     <span className="truncate">{l.owner_name}</span>
-                    <span className="shrink-0">{l.expiry_date}</span>
+                    <span className="shrink-0">{formatDate(l.expiry_date)}</span>
                   </li>
                 ))}
               </ul>

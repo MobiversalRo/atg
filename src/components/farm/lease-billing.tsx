@@ -6,6 +6,7 @@ import { useRouter } from '@/i18n/navigation';
 import { useSession } from '@/components/auth/session-provider';
 import { can } from '@/lib/auth/rbac';
 import { sqmToHa } from '@/lib/domain/area';
+import { formatDate } from '@/lib/domain/date';
 import { setLeasePaymentStatus, type LeaseBillingRow } from '@/lib/actions/leases';
 import {
   Table,
@@ -61,7 +62,7 @@ export function LeaseBilling({ data }: { data: LeaseBillingRow[] }) {
                   <TableCell className="font-medium">{r.owner_name}</TableCell>
                   <TableCell>{r.parcel_label ?? '—'}</TableCell>
                   <TableCell>{r.contract_number ?? '—'}</TableCell>
-                  <TableCell>{r.expiry_date ?? '—'}</TableCell>
+                  <TableCell>{formatDate(r.expiry_date) || '—'}</TableCell>
                   <TableCell>
                     {nf.format(sqmToHa(r.area_sqm))} {t('haShort')}
                   </TableCell>

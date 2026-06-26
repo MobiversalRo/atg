@@ -7,6 +7,7 @@ import { toast } from 'sonner';
 import { Link, useRouter } from '@/i18n/navigation';
 import { unarchiveDossier } from '@/lib/actions/dossiers';
 import type { Dossier } from '@/lib/dossiers/schema';
+import { formatDate } from '@/lib/domain/date';
 import {
   Table,
   TableBody,
@@ -57,7 +58,7 @@ export function ArchivedDossierTable({ rows }: { rows: Dossier[] }) {
                   </Link>
                 </TableCell>
                 <TableCell>{d.original_holder ?? '—'}</TableCell>
-                <TableCell>{d.acquisition_date ?? '—'}</TableCell>
+                <TableCell>{formatDate(d.acquisition_date) || '—'}</TableCell>
                 <TableCell>
                   {d.intabulare_status ? t(`status_${d.intabulare_status}`) : '—'}
                 </TableCell>

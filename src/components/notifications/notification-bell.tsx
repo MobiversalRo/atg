@@ -13,6 +13,7 @@ import {
   type MyNotification,
 } from '@/lib/actions/notifications';
 import { Button } from '@/components/ui/button';
+import { formatDate } from '@/lib/domain/date';
 
 export function NotificationBell() {
   const t = useTranslations('notifications');
@@ -80,7 +81,7 @@ export function NotificationBell() {
                 >
                   <span>
                     {t(`type_${n.type}`)}
-                    {n.due_date ? ` · ${n.due_date}` : ''}
+                    {n.due_date ? ` · ${formatDate(n.due_date)}` : ''}
                   </span>
                   <Button variant="ghost" size="sm" onClick={() => markRead(n.id)}>
                     {t('markRead')}

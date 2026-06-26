@@ -8,6 +8,7 @@ import { useRouter } from '@/i18n/navigation';
 import { useSession } from '@/components/auth/session-provider';
 import { can } from '@/lib/auth/rbac';
 import { daysUntil, isExpiringSoon } from '@/lib/domain/leases';
+import { formatDate } from '@/lib/domain/date';
 import { deleteLease, type LeaseRow } from '@/lib/actions/leases';
 import { LeaseForm } from './lease-form';
 import {
@@ -61,7 +62,7 @@ export function LeaseTable({
     const soon = isExpiringSoon(l.expiry_date, 60);
     return (
       <div className="flex items-center gap-2">
-        <span>{l.expiry_date}</span>
+        <span>{formatDate(l.expiry_date)}</span>
         {days < 0 ? (
           <Badge variant="outline">{t('expired')}</Badge>
         ) : soon ? (

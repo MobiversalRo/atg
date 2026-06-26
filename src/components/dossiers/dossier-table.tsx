@@ -9,6 +9,7 @@ import { useSession } from '@/components/auth/session-provider';
 import { can } from '@/lib/auth/rbac';
 import type { Dossier } from '@/lib/dossiers/schema';
 import { archiveDossier } from '@/lib/actions/dossiers';
+import { formatDate } from '@/lib/domain/date';
 import {
   Table,
   TableBody,
@@ -73,7 +74,7 @@ export function DossierTable({
                     </Link>
                   </TableCell>
                   <TableCell>{d.original_holder ?? '—'}</TableCell>
-                  <TableCell>{d.acquisition_date ?? '—'}</TableCell>
+                  <TableCell>{formatDate(d.acquisition_date) || '—'}</TableCell>
                   <TableCell>
                     {d.intabulare_status ? t(`status_${d.intabulare_status}`) : '—'}
                   </TableCell>
