@@ -96,3 +96,24 @@ test('admin can edit a dossier (CF-1)', async ({ page }) => {
     page.getByRole('row', { name: new RegExp(num) }).getByText('After Edit'),
   ).toBeVisible();
 });
+
+test('clicking a document row opens the edit pop-up and saves metadata (Req 4)', async ({ page }) => {
+  await login(page);
+  await page.goto('/ro/dossiers');
+  await page.getByRole('link', { name: '101' }).click();
+  await page.locator('input[type="file"]').setInputFiles({
+    name: 'meta-test.pdf',
+    mimeType: 'application/pdf',
+    buffer: Buffer.from('%PDF-1.4'),
+  });
+  await page.getByRole('button', { name: 'Încarcă document' }).click();
+  await expect(page.getByText('meta-test.pdf')).toBeVisible();
+
+  await page.getByRole('cell', { name: 'meta-test.pdf' }).click();
+  const dialog = page.getByRole('dialog');
+  await expect(dialog).toBeVisible();
+  const nr = `NR-${Date.now()}`;
+  await dialog.getByLabel('Număr').fill(nr);
+  await dialog.getByRole('button', { name: 'Salvează' }).click();
+  await expect(page.getByText(nr)).toBeVisible();
+});

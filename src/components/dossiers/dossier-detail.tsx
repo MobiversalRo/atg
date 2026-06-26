@@ -11,6 +11,7 @@ import type { Dossier } from '@/lib/dossiers/schema';
 import type { Parcel } from '@/lib/farm/schema';
 import type { Document } from '@/lib/documents/schema';
 import { sqmToHa } from '@/lib/domain/area';
+import { formatDate } from '@/lib/domain/date';
 import { DocumentList } from './document-list';
 import { DocumentUpload } from './document-upload';
 import { Button } from '@/components/ui/button';
@@ -33,11 +34,8 @@ export function DossierDetail({
   const { role } = useSession();
   const canArchive = can(role, 'dossiers', 'delete');
   const canUpload = can(role, 'documents', 'create');
+  const canEditDoc = can(role, 'documents', 'update');
   const [confirm, setConfirm] = React.useState(false);
-  const typeNames = React.useMemo(
-    () => Object.fromEntries(documentTypes.map((x) => [x.id, x.name])),
-    [documentTypes],
-  );
 
   async function onArchive() {
     setConfirm(false);
@@ -61,7 +59,7 @@ export function DossierDetail({
             {t('holder')}: {dossier.original_holder ?? '—'}
           </p>
           <p>
-            {t('acquisitionDate')}: {dossier.acquisition_date ?? '—'}
+            {t('acquisitionDate')}: {formatDate(dossier.acquisition_date) || '—'}
           </p>
           <p>
             {t('status')}: {dossier.intabulare_status ? t(`status_${dossier.intabulare_status}`) : '—'}
@@ -99,7 +97,7 @@ export function DossierDetail({
 
       <section className="flex flex-col gap-3">
         <h2 className="text-sm font-medium">{t('documents')}</h2>
-        <DocumentList documents={documents} typeNames={typeNames} />
+        <DocumentList documents={documents} documentTypes={documentTypes} canEdit={canEditDoc} />
         {canUpload ? <DocumentUpload dossierId={dossier.id} types={documentTypes} /> : null}
       </section>
 

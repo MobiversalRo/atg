@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { useRouter } from '@/i18n/navigation';
 import { uploadDocument } from '@/lib/actions/documents';
 import { DOCUMENT_VARIANTS } from '@/lib/documents/schema';
+import { DocumentTypeSelect } from './document-type-select';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -23,6 +24,8 @@ export function DocumentUpload({
   const router = useRouter();
   const formRef = React.useRef<HTMLFormElement>(null);
   const [busy, setBusy] = React.useState(false);
+  const [fileName, setFileName] = React.useState('');
+  const [formKey, setFormKey] = React.useState(0);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -30,7 +33,7 @@ export function DocumentUpload({
     fd.set('dossier_id', dossierId);
     const file = fd.get('file');
     if (!(file instanceof File) || file.size === 0) {
-      toast.error(t('file'));
+      toast.error(t('noFileChosen'));
       return;
     }
     setBusy(true);
@@ -42,6 +45,8 @@ export function DocumentUpload({
     }
     toast.success(tc('saved'));
     formRef.current?.reset();
+    setFileName('');
+    setFormKey((k) => k + 1);
     router.refresh();
   }
 
@@ -50,19 +55,24 @@ export function DocumentUpload({
       <p className="text-sm font-medium">{t('upload')}</p>
       <div className="grid gap-1.5">
         <Label>{t('file')}</Label>
-        <Input type="file" name="file" required />
+        <div className="flex items-center gap-3">
+          <label className="inline-flex cursor-pointer items-center rounded-md bg-black px-3 py-2 text-sm font-medium text-white hover:bg-black/90">
+            {t('chooseFile')}
+            <input
+              type="file"
+              name="file"
+              required
+              className="sr-only"
+              onChange={(e) => setFileName(e.target.files?.[0]?.name ?? '')}
+            />
+          </label>
+          <span className="truncate text-sm text-muted-foreground">{fileName || t('noFileChosen')}</span>
+        </div>
       </div>
       <div className="grid grid-cols-2 gap-3">
         <div className="grid gap-1.5">
           <Label>{t('type')}</Label>
-          <NativeSelect name="document_type_id">
-            <option value="">—</option>
-            {types.map((x) => (
-              <option key={x.id} value={x.id}>
-                {x.name}
-              </option>
-            ))}
-          </NativeSelect>
+          <DocumentTypeSelect key={formKey} name="document_type_id" initialTypes={types} />
         </div>
         <div className="grid gap-1.5">
           <Label>{t('variant')}</Label>
