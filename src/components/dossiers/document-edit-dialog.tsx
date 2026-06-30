@@ -104,7 +104,7 @@ function EditForm({
   return (
     <div className="flex flex-col gap-3">
       <p className="truncate text-sm text-muted-foreground">{doc.original_filename}</p>
-      <div className="grid gap-1.5">
+      <div className="grid grid-cols-1 gap-1.5">
         <Label>{t('type')}</Label>
         <DocumentTypeSelect
           value={typeId}
@@ -114,7 +114,7 @@ function EditForm({
         />
       </div>
       <div className="grid grid-cols-2 gap-3">
-        <div className="grid gap-1.5">
+        <div className="grid grid-cols-1 gap-1.5">
           <Label htmlFor="doc-variant">{t('variant')}</Label>
           <NativeSelect
             id="doc-variant"
@@ -130,11 +130,11 @@ function EditForm({
             ))}
           </NativeSelect>
         </div>
-        <div className="grid gap-1.5">
+        <div className="grid grid-cols-1 gap-1.5">
           <Label htmlFor="doc-number">{t('number')}</Label>
           <Input id="doc-number" value={docNumber} disabled={!canEdit} onChange={(e) => setDocNumber(e.target.value)} />
         </div>
-        <div className="grid gap-1.5">
+        <div className="grid grid-cols-1 gap-1.5">
           <Label htmlFor="doc-date">{t('date')}</Label>
           <Input id="doc-date" type="date" value={docDate} disabled={!canEdit} onChange={(e) => setDocDate(e.target.value)} />
         </div>
